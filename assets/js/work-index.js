@@ -3,7 +3,8 @@
    - Filter chips (animated collapse for rows, FLIP for cards)
    - Floating cursor preview with an animated mini chart (desktop)
    - Expandable rows with the same mini chart (touch / narrow)
-   All chart series are synthetic (seeded PRNG) and labelled illustrative.
+   The "sent" chart draws the study's real holdout curves (traced, loaded from
+   assets/data/sentiment.json); the "agents" chart is synthetic and labelled illustrative.
    ========================================================= */
 (() => {
   const AK = window.AK;
@@ -20,19 +21,8 @@
   const gaussFrom = (r) => () => Math.sqrt(-2 * Math.log(r() + 1e-9)) * Math.cos(2 * Math.PI * r());
 
   const SERIES = {
-    sent: (() => {
-      const g = gaussFrom(mulberry32(2026));
-      const N = 90, split = 58, B = [], M = [];
-      let b = 0, w = 0;
-      for (let i = 0; i < N; i++) {
-        b += 0.012 + g() * 0.03; w += g() * 0.012;
-        let edge;
-        if (i <= split) edge = 0.42 * Math.pow(i / split, 1.15) + w * (i / split);
-        else { const u = (i - split) / (N - 1 - split); edge = 0.42 + (-0.16 - 0.42) * (1 - Math.pow(1 - u, 2)) + w * 0.6; }
-        B.push(b); M.push(b + edge);
-      }
-      return { N, split, lines: [{ d: M, c: "--accent", w: 1.5 }, { d: B, c: "--ink", w: 1.5 }] };
-    })(),
+    // Real holdout curves (Jan 2024 – Jan 2026), filled in from sentiment.json below.
+    sent: { N: 2, split: null, label: "HOLDOUT · 2024 → 2026", lines: [] },
     agents: (() => {
       const r = mulberry32(77), g = gaussFrom(r);
       const N = 22, target = 0.55, starts = [0.95, 0.2, 0.75, 0.38];
@@ -62,6 +52,11 @@
     const { ctx, w, h } = f;
     const S = SERIES[kind];
     ctx.clearRect(0, 0, w, h);
+    if (!S.lines.length) {   // data not loaded (e.g. file://): say so instead of drawing nothing
+      ctx.fillStyle = AK.css("--ink-3"); ctx.font = `11px ${AK.css("--mono") || "monospace"}`; ctx.textAlign = "left"; ctx.textBaseline = "top";
+      ctx.fillText("Holdout: −12.95% vs +47.09% B&H", 10, 10);
+      return;
+    }
     const pad = { l: 10, r: 10, t: 24, b: 12 };
     const all = S.lines.flatMap((l) => l.d);
     const lo = Math.min(...all), hi = Math.max(...all);
@@ -86,7 +81,7 @@
       ctx.textAlign = "left"; ctx.fillText("TEST", sx + 5, 6);
       ctx.globalAlpha = 1;
     } else {
-      ctx.fillStyle = AK.css("--ink-3"); ctx.textAlign = "left"; ctx.fillText("ROUNDS →", pad.l, 6);
+      ctx.fillStyle = AK.css("--ink-3"); ctx.textAlign = "left"; ctx.fillText(S.label || "ROUNDS →", pad.l, 6);
     }
 
     const upto = k * (S.N - 1);
@@ -161,6 +156,8 @@
           current = item;
           preview.querySelector('[data-p="num"]').textContent = row.querySelector(".num").textContent;
           preview.querySelector('[data-p="cap"]').textContent = item.dataset.cap;
+          const pNote = preview.querySelector('[data-p="note"]');
+          if (pNote && item.dataset.note != null) pNote.textContent = item.dataset.note;
           preview.classList.add("is-on");
           dropCue();
           requestAnimationFrame(() => animate(pCanvas, item.dataset.preview));
@@ -243,4 +240,20 @@
     chips.forEach((c) => c.setAttribute("aria-pressed", c === chip ? "true" : "false"));
     apply(chip.dataset.filter);
   }));
+  /* ---------- Real holdout curves for the sentiment chart ---------- */
+  fetch(AK.root + "assets/data/sentiment.json")
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((d) => {
+      const rows = d.holdout.rows;
+      SERIES.sent.N = rows.length;
+      SERIES.sent.lines = [
+        { d: rows.map((r) => r[2]), c: "--accent", w: 1.5 },
+        { d: rows.map((r) => r[1]), c: "--ink", w: 1.5 },
+      ];
+      document.querySelectorAll('canvas[data-mini="sent"]').forEach((cv) =>
+        cv.setAttribute("aria-label", "Holdout, Jan 2024 to Jan 2026: buy-and-hold rises to +47.09%; the sentiment strategy ends at −12.95%."));
+      document.querySelectorAll('.wi-detail.is-open canvas[data-mini="sent"]').forEach((cv) => drawMini(cv, "sent", 1));
+      if (current && pCanvas && current.dataset.preview === "sent") drawMini(pCanvas, "sent", 1);
+    })
+    .catch(() => {});
 })();

@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading the News — Abhay Kumar</title>
-<meta name="description" content="Case 02.1: does news sentiment predict S&amp;P 500 returns? 24 years, 6,000+ trading days, LASSO, Ridge and Elastic Net against buy-and-hold. Out-of-sample, buy-and-hold won.">
+<meta name="description" content="Case 02.1: a FIN 465 group study of whether daily news sentiment predicts the S&amp;P 500. 6.5M stories, one Elastic Net, 522 unseen trading days: the strategy lost 12.95% while buy-and-hold gained 47.09%. IC −0.02.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Reading the News — Abhay Kumar">
-<meta property="og:description" content="Case 02.1: does news sentiment predict S&amp;P 500 returns? 24 years, 6,000+ trading days, LASSO, Ridge and Elastic Net against buy-and-hold. Out-of-sample, buy-and-hold won.">
+<meta property="og:description" content="Case 02.1: a FIN 465 group study of whether daily news sentiment predicts the S&amp;P 500. 6.5M stories, one Elastic Net, 522 unseen trading days: the strategy lost 12.95% while buy-and-hold gained 47.09%. IC −0.02.">
 <meta property="og:url" content="https://abhay-kumar-2501.github.io/work/sentiment.html">
 <meta property="og:image" content="https://abhay-kumar-2501.github.io/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -16,8 +16,8 @@
 <script>document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..500,0..100,0..1;1,9..144,400,0..100,0..1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/base.css?v=5">
-<link rel="stylesheet" href="../assets/css/work.css?v=5">
+<link rel="stylesheet" href="../assets/css/base.css?v=7">
+<link rel="stylesheet" href="../assets/css/work.css?v=7">
 </head>
 <body data-page="case" data-root="../" data-next="agents" class="cs-sentiment">
 <main id="main">
@@ -25,23 +25,25 @@
   <!-- ============ Hero ============ -->
   <header class="cs-hero wrap">
     <a class="cs-back label" href="index.html"><span aria-hidden="true">←</span> Selected Work</a>
-    <p class="eyebrow" data-reveal><span class="accent">Case 02.1</span><span>Quantitative research</span><span>Jan–May 2026</span></p>
+    <p class="eyebrow" data-reveal><span class="accent">Case 02.1</span><span>Quantitative research</span><span>FIN 465 group project</span></p>
     <h1 class="h1 cs-title" data-split>Reading the News</h1>
     <p class="lede cs-question" data-reveal style="--d:.25s">Does the news move the market — predictably?</p>
-    <dl class="cs-meta" data-reveal style="--d:.35s">
-      <div><dt>Role</dt><dd>Researcher</dd></div>
-      <div><dt>Timeline</dt><dd>Jan–May 2026</dd></div>
+    <dl class="cs-meta cs-sent-meta" data-reveal style="--d:.35s">
+      <div><dt>Role</dt><dd>Co-author, group of two</dd></div>
+      <div><dt>Team</dt><dd>With Mohammed Almasbah</dd></div>
+      <div><dt>Course</dt><dd>FIN 465, Data Science &amp; AI for Finance · Penn State</dd></div>
+      <div><dt>Timeline</dt><dd>Jan – May 2026</dd></div>
       <div><dt>Tools</dt><dd>Python, pandas, scikit-learn</dd></div>
-      <div class="cs-meta-outcome"><dt>Outcome</dt><dd>Buy-and-hold won. The model learned the noise.</dd></div>
+      <div class="cs-meta-outcome"><dt>Outcome</dt><dd>On unseen data, buy-and-hold won — by sixty points.</dd></div>
     </dl>
   </header>
 
   <div class="wrap">
-    <ul class="cs-facts cs-sent-facts" aria-label="Scope of the study">
-      <li><b class="figure" data-count="24">0</b><span class="label">Years of data</span></li>
-      <li><b class="figure" data-count="6000" data-suffix="+">0</b><span class="label">Trading days</span></li>
-      <li><b class="figure" data-count="3">0</b><span class="label">Penalised models</span></li>
-      <li><b class="figure" data-count="1">0</b><span class="label">Benchmark that won</span></li>
+    <ul class="cs-facts cs-sent-facts" aria-label="The study in four numbers">
+      <li><b class="figure" data-count="6.5" data-decimals="1" data-suffix="M">6.5M</b><span class="label">News stories, 2000–2023</span></li>
+      <li><b class="figure" data-count="522">522</b><span class="label">Unseen holdout days</span></li>
+      <li><b class="figure" data-count="12.95" data-decimals="2" data-prefix="−" data-suffix="%">−12.95%</b><span class="label">Strategy · vs +47.09% buy-and-hold</span></li>
+      <li><b class="figure" data-count="0.02" data-decimals="2" data-prefix="−">−0.02</b><span class="label">Information coefficient (t = −0.47)</span></li>
     </ul>
   </div>
 
@@ -50,11 +52,15 @@
     <div class="cs-chapter-head">
       <span class="cs-num">§ 01</span>
       <h2 class="h2" id="ch1" data-split>The question</h2>
+      <p class="cs-sub" data-reveal>What we built, and the rules we held it to.</p>
     </div>
     <div class="cs-chapter-body">
-      <p class="body" data-reveal>Markets react to headlines. That part isn't controversial. The useful question is narrower: <strong>if you score the tone of the news each day, can you trade on it tomorrow</strong> — and beat simply holding the index?</p>
-      <p class="body" data-reveal>I tested it on the S&amp;P 500 across 24 years — more than 6,000 trading days — in Python. Daily sentiment became the input; a daily position (in, out, or somewhere between) became the output.</p>
-      <p class="body" data-reveal>Three models did the translating: <strong>LASSO</strong>, <strong>Ridge</strong> and <strong>Elastic Net</strong>. All three are linear regressions with a penalty for complexity. The benchmark was the most boring strategy available: buy the index and hold it.</p>
+      <p class="body" data-reveal>Markets react to headlines. That part isn&rsquo;t controversial. The useful question is narrower: <strong>if you score the tone of the news each day, can you trade on it the next — and beat simply holding the index?</strong></p>
+      <p class="body" data-reveal>Mohammed Almasbah and I tested it for FIN 465. We scored roughly <strong>6.5 million U.S.-economy news stories</strong> (Alexandria Technology&rsquo;s AE@USA feed, 2000–2023) and lined them up against daily S&amp;P 500 close-to-close returns.</p>
+      <p class="body" data-reveal>Timing is where studies like this quietly cheat, so we drew a hard line at <strong>4 PM Eastern</strong> — timezone- and daylight-saving-aware. A story only counts toward a return it could actually have traded on; after-close, weekend and holiday stories (502,298 of them) roll forward to the next real trading day.</p>
+      <p class="body" data-reveal>Each day became 15 features across six families: sentiment level, dispersion, volume and attention, probability and confidence, topic-level tone for the Fed and markets, and momentum. Rolling features were shifted so no day could see its own future.</p>
+      <p class="body" data-reveal>One model did the translating: an <strong>Elastic Net</strong>. It blends LASSO&rsquo;s habit of zeroing out weak inputs with Ridge&rsquo;s steadiness when inputs move together — and fifteen sentiment measures are mostly cousins of each other. We tuned it with GridSearchCV over a five-fold TimeSeriesSplit, trained on 2000 to March 2019, validated on March 2019 to 2023, never shuffled, and fit the scaler on training data only.</p>
+      <p class="body" data-reveal>Then we locked it and pointed it at two years it had never seen.</p>
     </div>
   </section>
 
@@ -65,129 +71,137 @@
         <div class="cs-sent-side">
           <div>
             <span class="cs-num">§ 02</span>
-            <h2 class="label" id="ch2" style="margin:6px 0 0">The experiment, scrolled</h2>
-            <p class="cs-sub cs-sent-sub">Keep scrolling — the chart builds the study in four steps.</p>
+            <h2 class="label" id="ch2" style="margin:6px 0 0">The test, scrolled</h2>
+            <p class="cs-sub cs-sent-sub">Keep scrolling — the chart replays the result in four steps.</p>
           </div>
           <ol class="cs-sent-ticks" aria-hidden="true">
-            <li class="is-on">Score</li><li>Fit</li><li>Split</li><li>Test</li>
+            <li class="is-on">Validate</li><li>Holdout</li><li>Break</li><li>Verdict</li>
           </ol>
           <div class="cs-steps" aria-live="polite">
             <div class="cs-step cs-sent-step is-on" data-step="0">
-              <span class="label">Step 1 · Score the news</span>
-              <h3 class="h3">Every trading day gets a tone.</h3>
-              <p>News is reduced to a daily sentiment reading — positive above the line, negative below. Underneath it, the index does what the index does.</p>
+              <span class="label">Step 1 · Validation, 2019–2023</span>
+              <h3 class="h3">It dodged COVID. It looked like skill.</h3>
+              <p>The strategy stepped aside during the 2020 crash — then gave the cushion back. It finished at 8.31% a year (Sharpe 0.39) against buy-and-hold&rsquo;s 13.17% (0.61).</p>
             </div>
             <div class="cs-step cs-sent-step" data-step="1">
-              <span class="label">Step 2 · Fit the models</span>
-              <h3 class="h3">In-sample, it looks like alpha.</h3>
-              <p>Fit on the training years, all three models turn sentiment into positions that climb above buy-and-hold. This is the chart that makes people stop testing.</p>
+              <span class="label">Step 2 · Holdout begins, Jan 2024</span>
+              <h3 class="h3">Unseen data. At first, it keeps up.</h3>
+              <p>522 trading days the model never saw, and no refitting. Through mid-2024 it tracks the index, and its rolling 60-day hit rate touches about 66%.</p>
             </div>
             <div class="cs-step cs-sent-step" data-step="2">
-              <span class="label">Step 3 · Hold data out</span>
-              <h3 class="h3">Draw the line it never saw past.</h3>
-              <p>The real test: years the models were never fitted on. Everything left of the line is memory. Everything right of it is prediction.</p>
+              <span class="label">Step 3 · The break</span>
+              <h3 class="h3">Then the streak runs out.</h3>
+              <p>By late 2024 the hit rate falls to about 33%. The April 2025 tariff shock takes the strategy to a −41.08% maximum drawdown; buy-and-hold&rsquo;s worst was −18.90%.</p>
             </div>
             <div class="cs-step cs-sent-step" data-step="3">
-              <span class="label">Step 4 · Test</span>
-              <h3 class="h3">Out-of-sample, buy-and-hold wins.</h3>
-              <p>On held-out data the edge disappears and the models fall behind the index. The in-sample gains were overfitting — the models had learned the noise.</p>
+              <span class="label">Step 4 · Verdict</span>
+              <h3 class="h3">A coin flip, already priced in.</h3>
+              <p>Over the holdout: −12.95% against +47.09%. Information coefficient −0.02 (t = −0.47), directional accuracy 49.81%, Sharpe −0.41 against 1.30.</p>
             </div>
           </div>
         </div>
         <figure class="cs-figure cs-sent-chart">
           <ul class="cs-sent-legend" aria-label="Legend">
             <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--ink)" stroke-width="2"/></svg>Buy &amp; hold</li>
-            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--accent)" stroke-width="1.5"/></svg>LASSO</li>
-            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 3"/></svg>Ridge</li>
-            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="1.5 3"/></svg>Elastic Net</li>
+            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--accent)" stroke-width="2"/></svg>Sentiment strategy</li>
+            <li class="cs-sent-legend-acc"><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--ink-2)" stroke-width="1.25"/></svg>60-day accuracy</li>
           </ul>
           <div class="cs-figure-frame">
-            <canvas id="sent-canvas" role="img" aria-label="Illustrative chart. A daily sentiment series runs along the bottom. In the in-sample region, LASSO, Ridge and Elastic Net equity curves rise above buy-and-hold. A train/test split line then appears; in the out-of-sample region the three model curves fall back below buy-and-hold."></canvas>
+            <canvas id="sent-canvas" role="img" aria-label="Growth of one dollar. Validation, March 2019 to 2023: the strategy sidesteps the COVID crash but ends behind buy-and-hold, 8.31% a year against 13.17%. Holdout, January 2024 to January 2026: the strategy tracks the index into mid-2024 while its rolling 60-day accuracy peaks near 66%, then falls apart, with a −41.08% drawdown in April 2025. It ends at −12.95% against +47.09% for buy-and-hold; information coefficient −0.02, directional accuracy 49.81%."></canvas>
+            <div class="cs-sent-fallback" id="sent-fallback" hidden>
+              <p class="label">Chart data didn&rsquo;t load here — the figures:</p>
+              <dl>
+                <div><dt>Validation 2019–23</dt><dd>Strategy 8.31%/yr (Sharpe 0.39) · Buy &amp; hold 13.17%/yr (0.61)</dd></div>
+                <div><dt>Holdout 2024–26</dt><dd>Strategy −12.95% · Buy &amp; hold +47.09%</dd></div>
+                <div><dt>Max drawdown</dt><dd>−41.08% (Apr 2025) vs −18.90%</dd></div>
+                <div><dt>Signal</dt><dd>IC −0.02 (t = −0.47) · accuracy 49.81%</dd></div>
+              </dl>
+            </div>
           </div>
-          <figcaption><span class="label">Fig. 1</span> <span class="cap">Growth of a dollar, log scale, with daily sentiment beneath.</span> <span class="note">Illustrative — not the study&rsquo;s data.</span></figcaption>
+          <figcaption><span class="label">Fig. 1</span> <span class="cap">Growth of $1: validation, then the 2024–26 holdout, with rolling 60-day accuracy beneath.</span> <span class="note">Traced from our charts; figures from the final report.</span></figcaption>
         </figure>
       </div>
     </div>
   </section>
 
-  <!-- ============ §03 Regularisation explainer ============ -->
+  <!-- ============ §03 What the model kept ============ -->
   <section class="cs-chapter wrap" aria-labelledby="ch3">
     <div class="cs-chapter-head">
       <span class="cs-num">§ 03</span>
-      <h2 class="h2" id="ch3" data-split>Three ways to say less</h2>
-      <p class="cs-sub" data-reveal>How LASSO, Ridge and Elastic Net keep a model from over-fitting.</p>
+      <h2 class="h2" id="ch3" data-split>What the model kept</h2>
+      <p class="cs-sub" data-reveal>Fifteen features in. Six survived the penalty.</p>
     </div>
     <div class="cs-chapter-body">
-      <p class="body" data-reveal>Penalised regression is the textbook defence against overfitting: charge the model for every coefficient it relies on, and it has to choose. The penalty strength, <strong>λ</strong>, sets the price. The three models differ in <em>how</em> they charge.</p>
-      <p class="body" data-reveal>Drag the slider. Watch what each one does to the same eight coefficients.</p>
+      <p class="body" data-reveal>Tuning landed on <strong>alpha = 6×10⁻⁵</strong> and an <strong>l1_ratio of 0.95</strong> — an Elastic Net that is almost pure LASSO. It kept six of the fifteen features and set the other nine to exactly zero.</p>
+      <p class="body" data-reveal>Read the signs and the story is consistent: good news about the market is already in the price. Pick a feature to see what its sign says.</p>
     </div>
 
     <div class="cs-sent-reg" data-reveal>
       <div class="cs-sent-controls">
-        <div class="cs-tabs" role="tablist" aria-label="Regularisation method">
-          <button class="cs-tab" role="tab" id="tab-lasso" aria-selected="true" aria-controls="reg-panel" data-m="lasso">LASSO</button>
-          <button class="cs-tab" role="tab" id="tab-ridge" aria-selected="false" aria-controls="reg-panel" data-m="ridge" tabindex="-1">Ridge</button>
-          <button class="cs-tab" role="tab" id="tab-enet" aria-selected="false" aria-controls="reg-panel" data-m="enet" tabindex="-1">Elastic Net</button>
-        </div>
-        <div class="cs-sent-lam">
-          <div class="row"><label class="label" for="lam">Penalty strength (λ)</label><output id="lam-out" for="lam">0.35</output></div>
-          <input class="cs-range" type="range" id="lam" min="0" max="100" value="35" aria-describedby="reg-explain">
-          <div class="ends"><span class="note">Weak — fits everything</span><span class="note">Strong — fits little</span></div>
-          <span class="cue" id="lam-cue" aria-hidden="true">Drag the dot to raise the penalty</span>
-        </div>
-        <div class="cs-sent-explain" id="reg-explain" aria-live="polite">
-          <h3 class="h3" data-x="title">LASSO · L1 penalty</h3>
-          <p data-x="text">Shrinks every coefficient by the same amount — and once a weak one hits zero, it stays there. Built-in feature selection.</p>
+        <div class="cs-sent-explain" id="feat-explain" aria-live="polite">
+          <span class="label" data-x="tag">Kept · negative</span>
+          <h3 class="h3" data-x="title">Tone of market news</h3>
+          <p data-x="text">Positive market news is already priced in. The model leans contrarian: the brighter the coverage, the weaker the next day it expects.</p>
+          <span class="cue" id="feat-cue" aria-hidden="true">Hover or tap a feature to read it</span>
         </div>
         <div class="cs-sent-read">
-          <div><b id="reg-nz">8/8</b><span class="label">Coefficients kept</span></div>
-          <div><b id="reg-mass">100%</b><span class="label">Total weight left</span></div>
+          <div><b id="reg-nz">6/15</b><span class="label" id="reg-nz-l">Features kept</span></div>
+          <div><b id="reg-zero">9</b><span class="label" id="reg-zero-l">Set to zero</span></div>
+        </div>
+        <div class="cs-sent-lam">
+          <div class="row"><label class="label" for="mix">LASSO ↔ Ridge mix (l1_ratio)</label><output id="mix-out" for="mix">0.95</output></div>
+          <div class="cs-sent-mixwrap">
+            <input class="cs-range" type="range" id="mix" min="0" max="100" step="5" value="95" aria-describedby="mix-mode">
+            <span class="cs-sent-ours" aria-hidden="true">Our fit</span>
+          </div>
+          <div class="ends"><span class="note">0 · all Ridge</span><span class="note">1 · all LASSO</span></div>
+          <p class="cs-sent-mode" id="mix-mode">Fitted result at our l1_ratio of 0.95.</p>
         </div>
       </div>
-      <figure class="cs-figure" id="reg-panel" role="tabpanel" aria-labelledby="tab-lasso">
-        <ul class="cs-sent-bars" id="reg-bars" aria-label="Coefficient values"></ul>
-        <div class="cs-sent-axis" aria-hidden="true"><span></span><div><span class="note">− negative</span><span class="note">0</span><span class="note">positive +</span></div><span></span></div>
-        <figcaption><span class="label">Fig. 2</span> Dashed outline: unpenalised fit. Solid: after the penalty. <span class="note">Illustrative coefficients.</span></figcaption>
+      <figure class="cs-figure cs-sent-coef" id="reg-panel">
+        <ul class="cs-sent-bars" id="reg-bars" aria-label="Elastic Net coefficients, relative to the largest"></ul>
+        <div class="cs-sent-axis" aria-hidden="true"><span></span><div><span class="note">− lower next-day return</span><span class="note">0</span><span class="note">higher +</span></div><span></span></div>
+        <figcaption><span class="label">Fig. 2</span> <span class="cap">Coefficients relative to the largest. Signs exact; magnitudes read from our coefficient chart.</span> <span class="note">From the final report.</span></figcaption>
       </figure>
     </div>
 
     <div class="cs-chapter-body" style="margin-top:clamp(24px,4vw,48px)">
-      <p class="body" data-reveal>All three helped the models behave <em>inside</em> the sample. None of them could manufacture a signal that wasn't there. A penalty decides how much a model trusts its inputs; it can't make the inputs predictive.</p>
+      <p class="body" data-reveal>The penalty did its job: it kept the model small and honest inside the sample. It couldn&rsquo;t make the inputs predictive. On the holdout the results are what the efficient-markets view predicts — by the time a story is published, its sentiment is in the price. <strong>Daily news sentiment alone is not a basis for trading.</strong></p>
     </div>
   </section>
 
   <!-- ============ Pull quote ============ -->
   <blockquote class="cs-pull wrap" data-reveal>
-    <p>In-sample is a story you tell yourself. <em>Out-of-sample is the market's reply.</em></p>
+    <p>A hot streak in mid-2024 looked like a signal. <em>The rest of the holdout called it noise.</em></p>
     <cite class="label">— The finding, in one line</cite>
   </blockquote>
 
   <!-- ============ §04 Takeaways + deliverables ============ -->
   <section class="wrap cs-sent-close" aria-labelledby="ch4">
     <div class="sect-head" data-reveal>
-      <span class="num">§ 04</span><span class="title" id="ch4">What I'd do next</span><span class="fill"></span><span class="aside">Next steps, not done</span>
+      <span class="num">§ 04</span><span class="title" id="ch4">What we&rsquo;d do next</span><span class="fill"></span><span class="aside">From the report&rsquo;s limitations</span>
     </div>
     <ol class="cs-takeaways">
-      <li data-reveal><span class="cs-num">01</span><div><h3 class="h3">Walk-forward validation</h3><p class="body">One split is one draw. Re-fitting on a rolling window and testing on the next slice, again and again, would show whether the failure is consistent or unlucky.</p></div></li>
-      <li data-reveal style="--d:.08s"><span class="cs-num">02</span><div><h3 class="h3">Transaction costs</h3><p class="body">Daily repositioning isn't free. Adding costs and slippage would raise the bar a signal has to clear — and make any in-sample edge look smaller still.</p></div></li>
-      <li data-reveal><span class="cs-num">03</span><div><h3 class="h3">Better sentiment, same scepticism</h3><p class="body">Richer text models might read tone more accurately. Worth testing — under exactly the same held-out discipline, so a better input can't hide a worse habit.</p></div></li>
-      <li data-reveal style="--d:.08s"><span class="cs-num">04</span><div><h3 class="h3">Regimes and multiple testing</h3><p class="body">Check whether any signal lives only in specific market regimes, and adjust for how many variations get tried — the more you test, the easier it is to find luck.</p></div></li>
+      <li data-reveal><span class="cs-num">01</span><div><h3 class="h3">Intraday timing</h3><p class="body">A daily close-to-close return blurs when news actually lands. Matching stories to intraday prices would test whether any edge lives in the first minutes — before it&rsquo;s priced.</p></div></li>
+      <li data-reveal style="--d:.08s"><span class="cs-num">02</span><div><h3 class="h3">Regime-conditional interactions</h3><p class="body">Sentiment may matter only in some markets — calm or stressed. Interacting features with the regime would let the model say so, instead of averaging it away.</p></div></li>
+      <li data-reveal><span class="cs-num">03</span><div><h3 class="h3">Transaction costs</h3><p class="body">A daily long/short flip isn&rsquo;t free. Adding costs would raise the bar a signal has to clear — and this one didn&rsquo;t clear the bar before costs.</p></div></li>
+      <li data-reveal style="--d:.08s"><span class="cs-num">04</span><div><h3 class="h3">Sentiment plus price context</h3><p class="body">Pair the news with price-based context — realized volatility, the yield curve — so tone is read against the market it lands in, not on its own.</p></div></li>
     </ol>
 
     <div class="sect-head" data-reveal>
-      <span class="num">§ 05</span><span class="title">Deliverables</span><span class="sect-sub">— the write-up and the deck</span><span class="fill"></span><span class="aside">Available on request</span>
+      <span class="num">§ 05</span><span class="title">Deliverables</span><span class="sect-sub">— the group report and the deck</span><span class="fill"></span><span class="aside">Available on request</span>
     </div>
     <div class="cs-deliverables">
       <div class="cs-doc card" data-reveal>
         <div class="top"><span class="label">Document · 01</span><span class="label">Available on request</span></div>
-        <h3 class="h3">Research report</h3>
-        <p>Data, method, in- and out-of-sample results, and a plain section on the limits of the approach.</p>
-        <div class="cs-doc-ask"><a class="btn" href="mailto:codeabhay3@gmail.com?subject=Request%3A%20research%20report%20%E2%80%94%20news%20sentiment%20%26%20S%26P%20500%20study" data-no-curtain>Email to request <span class="arr" aria-hidden="true">→</span></a></div>
+        <h3 class="h3">Final report</h3>
+        <p>Our group report (with Mohammed Almasbah): data and the 4 PM cutoff, the model, validation and holdout results, and the limits.</p>
+        <div class="cs-doc-ask"><a class="btn" href="mailto:codeabhay3@gmail.com?subject=Request%3A%20final%20report%20%E2%80%94%20news%20sentiment%20%26%20S%26P%20500%20study" data-no-curtain>Email to request <span class="arr" aria-hidden="true">→</span></a></div>
       </div>
       <div class="cs-doc card" data-reveal style="--d:.08s">
         <div class="top"><span class="label">Deck · 02</span><span class="label">Available on request</span></div>
         <h3 class="h3">Presentation</h3>
-        <p>The same story, shorter: question, models, the split, and why the negative result is the result.</p>
+        <p>The same story, shorter: the question, the pipeline, what the model kept, and why the holdout is the result.</p>
         <div class="cs-doc-ask"><a class="btn" href="mailto:codeabhay3@gmail.com?subject=Request%3A%20presentation%20%E2%80%94%20news%20sentiment%20%26%20S%26P%20500%20study" data-no-curtain>Email to request <span class="arr" aria-hidden="true">→</span></a></div>
       </div>
     </div>
@@ -195,7 +209,7 @@
   </section>
 
 </main>
-<script src="../assets/js/site.js?v=5" defer></script>
-<script src="../assets/js/sentiment.js?v=5" defer></script>
+<script src="../assets/js/site.js?v=7" defer></script>
+<script src="../assets/js/sentiment.js?v=7" defer></script>
 </body>
 </html>

@@ -1,7 +1,8 @@
 /* =========================================================
    Home — hero price line, thesis scene, work mini-charts.
-   All series here are illustrative (seeded, deterministic):
-   they show the shape of an idea, never real market data.
+   Series are illustrative (seeded, deterministic) except the sentiment
+   work-card chart, which draws the study's real holdout curves
+   (traced, from assets/data/sentiment.json).
    ========================================================= */
 (() => {
   const AK = window.AK;
@@ -65,8 +66,8 @@
         note: "Supporting engagement for 700+ dancers. $17.7M raised.", href: "record.html#r-thon", dest: "the Record" },
       { t: Date.UTC(2025, 8, 1), date: "Sep 2025", role: "Nittany Markets & VITA", org: "Member · Volunteer tax preparer",
         note: "Market outlooks for 100+ members; tax returns for students and low-income residents.", href: "record.html#r-nmaa", dest: "the Record" },
-      { t: Date.UTC(2026, 0, 1), date: "Jan 2026", role: "News sentiment study", org: "Quantitative research project",
-        note: "24 years of S&P 500 returns. Out of sample, buy-and-hold won.", href: "work/sentiment.html", dest: "case 02.1" },
+      { t: Date.UTC(2026, 0, 1), date: "Jan 2026", role: "News sentiment study", org: "FIN 465 group project",
+        note: "6.5M news stories, one Elastic Net, 522 unseen days: −12.95% vs +47.09% buy-and-hold.", href: "work/sentiment.html", dest: "case 02.1" },
       { t: Date.UTC(2026, 4, 1), date: "May 2026", role: "Undergraduate Research Assistant", org: "Smeal College of Business",
         note: "Four AI agents replay a pricing experiment, refined across 20+ trials.", href: "work/agents.html", dest: "case 02.2" },
       { t: Date.UTC(2026, 5, 1), date: "Jun 2026", role: "LEAP Mentor", org: "Learning Edge Academic Program",
@@ -497,26 +498,33 @@
     svg._clip = cid;
 
     if (kind === "sentiment") {
-      const n = 80, cut = 48, sx = (i) => (300 * i) / (n - 1);
-      const bh = series(n, 349, { drift: 18, dip: 4, dipAt: 0.4 }).map((v, i) => [sx(i), 108 - v * 92]);
-      const r3 = rng(5);
-      const st = [];
-      let off = 0;
-      for (let i = 0; i < n; i++) {
-        if (i < cut) off = -14 * (i / cut) + gauss(r3) * 1.2;           // in-sample: looks better
-        else off += 1.25 + gauss(r3) * 1.6;                             // held-out: gives it back
-        st.push([sx(i), clamp(bh[i][1] + off, 6, 116)]);
-      }
-      const ln = document.createElementNS(SVGNS, "line");
-      ln.setAttribute("x1", sx(cut)); ln.setAttribute("x2", sx(cut)); ln.setAttribute("y1", 0); ln.setAttribute("y2", 120);
-      ln.setAttribute("class", "m-split");
-      svg.appendChild(ln);
-      mk(svg, pathD(bh), "m-ink");
-      mk(svg, pathD(st), "m-acc");
-      dot(wrap, bh[n - 1]); dot(wrap, st[n - 1], "acc");
-      const lab = document.createElement("span");
-      lab.className = "m-oos"; lab.style.left = (sx(cut) / 300) * 100 + "%"; lab.textContent = "Out of sample →";
-      wrap.appendChild(lab);
+      // Real holdout curves (Jan 2024 – Jan 2026), traced from the study's chart.
+      fetch((AK.root || "") + "assets/data/sentiment.json")
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((d) => {
+          const rows = d.holdout.rows, n = rows.length;
+          const vals = rows.flatMap((r) => [r[1], r[2]]);
+          const lo = Math.min(...vals), hi = Math.max(...vals);
+          const sx = (i) => (300 * i) / (n - 1), sy = (v) => 110 - ((v - lo) / (hi - lo)) * 92;
+          const bh = rows.map((r, i) => [sx(i), sy(r[1])]);
+          const st = rows.map((r, i) => [sx(i), sy(r[2])]);
+          const ln = document.createElementNS(SVGNS, "line");   // starting level: $1
+          ln.setAttribute("x1", 0); ln.setAttribute("x2", 300); ln.setAttribute("y1", sy(1)); ln.setAttribute("y2", sy(1));
+          ln.setAttribute("class", "m-split");
+          svg.insertBefore(ln, svg.firstChild.nextSibling);
+          mk(svg, pathD(bh), "m-ink");
+          mk(svg, pathD(st), "m-acc");
+          dot(wrap, bh[n - 1]); dot(wrap, st[n - 1], "acc");
+          const lab = document.createElement("span");
+          lab.className = "m-oos"; lab.style.left = "0%"; lab.textContent = "Holdout · 2024–26";
+          wrap.appendChild(lab);
+          svg.setAttribute("aria-label", "Holdout, Jan 2024 to Jan 2026: buy-and-hold rises to +47.09%; the sentiment strategy ends at −12.95%.");
+        })
+        .catch(() => {
+          const lab = document.createElement("span");
+          lab.className = "m-oos"; lab.style.left = "0%"; lab.textContent = "Holdout: −12.95% vs +47.09%";
+          wrap.appendChild(lab);
+        });
     } else if (kind === "agents") {
       const rounds = 20, sx = (j) => 6 + (288 * j) / (rounds - 1);
       const r4 = rng(31);

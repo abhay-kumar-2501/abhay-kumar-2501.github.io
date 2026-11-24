@@ -16,8 +16,8 @@
 <script>document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..500,0..100,0..1;1,9..144,400,0..100,0..1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/base.css?v=5">
-<link rel="stylesheet" href="../assets/css/work.css?v=5">
+<link rel="stylesheet" href="../assets/css/base.css?v=7">
+<link rel="stylesheet" href="../assets/css/work.css?v=7">
 </head>
 <body data-page="work" data-root="../" >
 <main id="main">
@@ -52,17 +52,17 @@
       <span>No.</span><span>Exhibit</span><span>Type</span><span>Year</span><span></span>
     </div>
     <ul class="wi-list" id="wi-list">
-      <li class="wi-item" data-cat="research markets" data-preview="sent"
-          data-cap="In-sample, the models soared. Out-of-sample, buy-and-hold won.">
+      <li class="wi-item" data-cat="research markets" data-preview="sent" data-note="Traced from the study&rsquo;s holdout chart."
+          data-cap="On 522 unseen days: strategy −12.95%, buy-and-hold +47.09%.">
         <div class="wi-inner">
           <a class="wi-row" href="sentiment.html">
             <span class="num">02.1</span>
             <span class="ttl">
               <strong>Reading the News</strong>
-              <small>News sentiment analysis of S&amp;P 500 returns — 24 years, 6,000+ trading days.</small>
+              <small>Does news sentiment predict the S&amp;P 500? 6.5M stories, one Elastic Net, 522 unseen trading days.</small>
               <span class="cue" id="wi-cue" aria-hidden="true">Hover a row to preview the chart</span>
               <span class="wi-mobile-meta">Quant research · 2026</span>
-              <span class="tags"><span class="tag">Python</span><span class="tag">LASSO · Ridge · EN</span><span class="tag">Out-of-sample</span></span>
+              <span class="tags"><span class="tag">Python</span><span class="tag">Elastic Net</span><span class="tag">Holdout test</span></span>
             </span>
             <span class="type">Quant research</span>
             <span class="yr">2026</span>
@@ -70,13 +70,13 @@
           </a>
           <button class="wi-toggle" aria-expanded="false" aria-controls="wi-d1">Tap for summary <span class="pm" aria-hidden="true">+</span></button>
           <div class="wi-detail" id="wi-d1"><div><div class="wi-detail-in">
-            <canvas data-mini="sent" role="img" aria-label="Illustrative chart: model curves rise above buy-and-hold in-sample, then fall below it out-of-sample."></canvas>
-            <p>Turned daily news sentiment into positions with three penalised regressions. They looked great in-sample; on held-out data, buy-and-hold won.</p>
-            <span class="note">Illustrative — not the study&rsquo;s data.</span>
+            <canvas data-mini="sent" role="img" aria-label="Holdout chart, January 2024 to January 2026: the sentiment strategy tracks buy-and-hold, then falls far behind it."></canvas>
+            <p>A two-person study: turned 6.5M news stories into daily long/short signals with an Elastic Net. On 522 unseen days it returned −12.95%; buy-and-hold returned +47.09%.</p>
+            <span class="note">Traced from the study&rsquo;s holdout chart.</span>
           </div></div></div>
         </div>
       </li>
-      <li class="wi-item" data-cat="research" data-preview="agents"
+      <li class="wi-item" data-cat="research" data-preview="agents" data-note="Illustrative — not experiment data."
           data-cap="Four AI agents replay a human pricing experiment under information asymmetry.">
         <div class="wi-inner">
           <a class="wi-row" href="agents.html">
@@ -135,12 +135,12 @@
       <div class="wi-preview-head"><span class="label" data-p="num">02.1</span><span class="label">Preview</span></div>
       <canvas></canvas>
       <p class="wi-preview-cap" data-p="cap"></p>
-      <span class="note">Illustrative — not the actual data.</span>
+      <span class="note" data-p="note">Illustrative — not the actual data.</span>
     </div>
   </div>
 
 </main>
-<script src="../assets/js/site.js?v=5" defer></script>
-<script src="../assets/js/work-index.js?v=5" defer></script>
+<script src="../assets/js/site.js?v=7" defer></script>
+<script src="../assets/js/work-index.js?v=7" defer></script>
 </body>
 </html>

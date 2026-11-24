@@ -16,8 +16,8 @@
 <script>document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..500,0..100,0..1;1,9..144,400,0..100,0..1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/base.css?v=5">
-<link rel="stylesheet" href="assets/css/home.css?v=5">
+<link rel="stylesheet" href="assets/css/base.css?v=7">
+<link rel="stylesheet" href="assets/css/home.css?v=7">
 </head>
 <body data-page="home" data-root="" >
 <main id="main">
@@ -77,8 +77,8 @@
     <div class="ticker-track">
       <span><b>AK.GPA</b> 3.99 <span class="up">▲</span></span>
       <span><b>DEAN’S LIST</b> 4/4</span>
-      <span><b>S&amp;P SENTIMENT</b> · 6,000+ DAYS</span>
-      <span><b>MODEL vs BUY&amp;HOLD</b> · OUT-OF-SAMPLE <span class="down">▼</span></span>
+      <span><b>NEWS STORIES</b> · 6.5M</span>
+      <span><b>SENTIMENT vs BUY&amp;HOLD</b> · <span class="down">−12.95%</span> / <span class="up">+47.09%</span></span>
       <span><b>AI AGENTS</b> · 4 · 20+ TRIALS</span>
       <span><b>SHIFTS / WK</b> 200+</span>
       <span><b>STAFF / SHIFT</b> 40+</span>
@@ -123,7 +123,7 @@
           <path class="th-act" clip-path="url(#th-c-a)"/>
         </svg>
         <span class="th-tag th-tag-split">Sample split</span>
-        <span class="th-tag th-tag-model">Model · in-sample promise</span>
+        <span class="th-tag th-tag-model">Model · the promise</span>
         <span class="th-tag th-tag-act">Held-out · what happened</span>
         <i class="th-dot th-dot-ink"></i>
         <i class="th-dot th-dot-acc"></i>
@@ -156,7 +156,7 @@
           <span class="fig-k">Research</span>
           <p class="fig-n figure"><span data-count="6000" data-suffix="+">6,000+</span></p>
           <h3 class="fig-l">Trading days analysed</h3>
-          <p class="fig-c">24 years of S&amp;P 500 returns, tested against daily news sentiment.</p>
+          <p class="fig-c">24 years of S&amp;P 500 returns, matched to 6.5M news stories.</p>
         </article>
         <article class="fig" data-reveal style="--d:.16s">
           <hr class="fig-rule" data-reveal="rule">
@@ -205,7 +205,7 @@
             <span class="label">Quantitative research · Jan–May 2026</span>
           </div>
           <div class="case-chart">
-            <svg class="mini" data-kind="sentiment" viewBox="0 0 300 120" preserveAspectRatio="none" role="img" aria-label="Illustrative chart: a sentiment strategy leads in-sample, then trails buy-and-hold on held-out data."></svg>
+            <svg class="mini" data-kind="sentiment" viewBox="0 0 300 120" preserveAspectRatio="none" role="img" aria-label="Holdout chart, January 2024 to January 2026: the sentiment strategy tracks buy-and-hold, then falls far behind it."></svg>
             <i class="mc-hair" aria-hidden="true"></i>
             <div class="mc-legend" aria-hidden="true">
               <span><i class="sw sw-ink"></i>Buy &amp; hold</span>
@@ -214,8 +214,8 @@
           </div>
           <h3 class="h2 case-title">Reading the News</h3>
           <p class="case-q">Does news sentiment predict the S&amp;P 500?</p>
-          <p class="case-s">24 years, three regularised models, one honest answer: out of sample, buy-and-hold won.</p>
-          <div class="case-tags"><span class="tag">Python</span><span class="tag">LASSO · Ridge · Elastic Net</span><span class="tag">Out-of-sample testing</span></div>
+          <p class="case-s">6.5M stories, one Elastic Net, 522 unseen days. Strategy −12.95%, buy-and-hold +47.09%.</p>
+          <div class="case-tags"><span class="tag">Python</span><span class="tag">Elastic Net</span><span class="tag">Holdout testing</span></div>
           <span class="case-cta">Read the case <span class="arr">→</span></span>
         </a>
 
@@ -238,7 +238,7 @@
           <span class="case-cta">Read the case <span class="arr">→</span></span>
         </a>
       </div>
-      <p class="note cases-note" data-reveal="fade"><sup>†</sup> Every chart on this page is illustrative — the shape of an idea, not actual data. The milestone dates on the cover line are real.</p>
+      <p class="note cases-note" data-reveal="fade"><sup>†</sup> The Reading the News chart is traced from the study&rsquo;s real holdout results. The other charts are illustrative; the milestone dates on the cover line are real.</p>
     </div>
   </section>
 
@@ -324,7 +324,7 @@
   </section>
 
 </main>
-<script src="assets/js/site.js?v=5" defer></script>
-<script src="assets/js/home.js?v=5" defer></script>
+<script src="assets/js/site.js?v=7" defer></script>
+<script src="assets/js/home.js?v=7" defer></script>
 </body>
 </html>

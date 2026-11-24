@@ -16,8 +16,8 @@
 <script>document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..500,0..100,0..1;1,9..144,400,0..100,0..1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/base.css?v=5">
-<link rel="stylesheet" href="assets/css/record.css?v=5">
+<link rel="stylesheet" href="assets/css/base.css?v=7">
+<link rel="stylesheet" href="assets/css/record.css?v=7">
 </head>
 <body data-page="record" data-root="" >
 <main id="main">
@@ -210,16 +210,16 @@
                 <span class="entry-cat">Research</span>
               </div>
               <div class="entry-main">
-                <p class="entry-org">Quantitative Research Project</p>
+                <p class="entry-org">Quantitative Research Project · FIN 465 group study</p>
                 <h3 class="h3">News Sentiment Analysis of S&amp;P 500 Returns</h3>
                 <ul class="entry-pts">
-                  <li>Tested whether news sentiment predicts S&amp;P 500 returns over 24 years in Python.</li>
-                  <li>Compared LASSO, Ridge and Elastic Net positions against buy-and-hold.</li>
-                  <li>Out-of-sample, buy-and-hold won. I documented why: the in-sample gains were overfitting.</li>
+                  <li>With a teammate, tested whether daily sentiment from ~6.5M news stories predicts next-day S&amp;P 500 returns, in Python.</li>
+                  <li>Built a 15-feature Elastic Net (LASSO and Ridge penalties combined), tuned with time-series cross-validation.</li>
+                  <li>On 522 unseen trading days the strategy returned −12.95% against +47.09% for buy-and-hold. The early “skill” was noise.</li>
                 </ul>
                 <a class="entry-link link-u" href="work/sentiment.html">Read the case study <span aria-hidden="true">→</span></a>
               </div>
-              <div class="entry-fig"><span class="figure">6,000+</span><span class="label">trading days</span></div>
+              <div class="entry-fig"><span class="figure">522</span><span class="label">unseen days tested</span></div>
             </li>
 
             <li class="entry" id="r-agents" data-year="2026" data-cat="research">
@@ -324,7 +324,7 @@
   </section>
 
 </main>
-<script src="assets/js/site.js?v=5" defer></script>
-<script src="assets/js/record.js?v=5" defer></script>
+<script src="assets/js/site.js?v=7" defer></script>
+<script src="assets/js/record.js?v=7" defer></script>
 </body>
 </html>
