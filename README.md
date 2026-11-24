@@ -25,5 +25,5 @@ Then open http://localhost:8000.
 
 ## Updating content
 - Résumé PDF: replace `assets/docs/Abhay_Kumar_Resume.pdf`.
-- LinkedIn URL: `LINKEDIN` in `assets/js/site.js` and the link in `about.html`.
+- LinkedIn URL: `LINKEDIN` in `assets/js/site.js` and the contact link in `about.html`.
 - Portrait: add `assets/img/portrait.jpg` and swap the placeholder in `about.html`.

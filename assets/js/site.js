@@ -26,7 +26,7 @@
   ];
   const RESUME = root + "assets/docs/Abhay_Kumar_Resume.pdf";
   const EMAIL = "codeabhay3@gmail.com";
-  const LINKEDIN = "https://www.linkedin.com/in/"; // TODO: replace with full profile URL
+  const LINKEDIN = "https://www.linkedin.com/in/abhay-kumar-2501/";
 
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const lerp = (a, b, t) => a + (b - a) * t;
