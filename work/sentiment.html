@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading the News — Abhay Kumar</title>
+<meta name="description" content="Case 02.1: does news sentiment predict S&amp;P 500 returns? 24 years, 6,000+ trading days, LASSO, Ridge and Elastic Net against buy-and-hold. Out-of-sample, buy-and-hold won.">
+<meta name="theme-color" content="#f4f1e9">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css?v=2">
+<link rel="stylesheet" href="../assets/css/work.css?v=2">
+</head>
+<body data-page="case" data-root="../" data-next="agents">
+<main id="main">
+
+  <!-- ============ Hero ============ -->
+  <header class="cs-hero wrap">
+    <a class="cs-back label" href="index.html"><span aria-hidden="true">←</span> Selected Work</a>
+    <p class="eyebrow" data-reveal><span class="accent">Case 02.1</span><span>Quantitative research</span><span>Jan–May 2026</span></p>
+    <h1 class="h1 cs-title" data-split>Reading the News</h1>
+    <p class="lede cs-question" data-reveal style="--d:.25s">Does the news move the market — predictably?</p>
+    <dl class="cs-meta" data-reveal style="--d:.35s">
+      <div><dt>Role</dt><dd>Researcher</dd></div>
+      <div><dt>Timeline</dt><dd>Jan–May 2026</dd></div>
+      <div><dt>Tools</dt><dd>Python, pandas, scikit-learn</dd></div>
+      <div class="cs-meta-outcome"><dt>Outcome</dt><dd>Buy-and-hold won. The model learned the noise.</dd></div>
+    </dl>
+  </header>
+
+  <div class="wrap">
+    <ul class="cs-facts cs-sent-facts" aria-label="Scope of the study">
+      <li><b class="figure" data-count="24">0</b><span class="label">Years of data</span></li>
+      <li><b class="figure" data-count="6000" data-suffix="+">0</b><span class="label">Trading days</span></li>
+      <li><b class="figure" data-count="3">0</b><span class="label">Penalised models</span></li>
+      <li><b class="figure" data-count="1">0</b><span class="label">Benchmark that won</span></li>
+    </ul>
+  </div>
+
+  <!-- ============ §01 The question ============ -->
+  <section class="cs-chapter wrap" aria-labelledby="ch1">
+    <div class="cs-chapter-head">
+      <span class="cs-num">§ 01</span>
+      <h2 class="h2" id="ch1" data-split>The question</h2>
+    </div>
+    <div class="cs-chapter-body">
+      <p class="body" data-reveal>Markets react to headlines. That part isn't controversial. The useful question is narrower: <strong>if you score the tone of the news each day, can you trade on it tomorrow</strong> — and beat simply holding the index?</p>
+      <p class="body" data-reveal>I tested it on the S&amp;P 500 across 24 years — more than 6,000 trading days — in Python. Daily sentiment became the input; a daily position (in, out, or somewhere between) became the output.</p>
+      <p class="body" data-reveal>Three models did the translating: <strong>LASSO</strong>, <strong>Ridge</strong> and <strong>Elastic Net</strong>. All three are linear regressions with a penalty for complexity. The benchmark was the most boring strategy available: buy the index and hold it.</p>
+    </div>
+  </section>
+
+  <!-- ============ §02 Sticky scroll scene ============ -->
+  <section class="cs-scene cs-sent-scene" data-scene id="scene" aria-labelledby="ch2">
+    <div class="cs-scene-sticky">
+      <div class="wrap cs-sent-stage">
+        <div class="cs-sent-side">
+          <div>
+            <span class="cs-num">§ 02</span>
+            <h2 class="label" id="ch2" style="margin:6px 0 0">The experiment, scrolled</h2>
+          </div>
+          <ol class="cs-sent-ticks" aria-hidden="true">
+            <li class="is-on">Score</li><li>Fit</li><li>Split</li><li>Test</li>
+          </ol>
+          <div class="cs-steps" aria-live="polite">
+            <div class="cs-step cs-sent-step is-on" data-step="0">
+              <span class="label">Step 1 · Score the news</span>
+              <h3 class="h3">Every trading day gets a tone.</h3>
+              <p>News is reduced to a daily sentiment reading — positive above the line, negative below. Underneath it, the index does what the index does.</p>
+            </div>
+            <div class="cs-step cs-sent-step" data-step="1">
+              <span class="label">Step 2 · Fit the models</span>
+              <h3 class="h3">In-sample, it looks like alpha.</h3>
+              <p>Fit on the training years, all three models turn sentiment into positions that climb above buy-and-hold. This is the chart that makes people stop testing.</p>
+            </div>
+            <div class="cs-step cs-sent-step" data-step="2">
+              <span class="label">Step 3 · Hold data out</span>
+              <h3 class="h3">Draw the line it never saw past.</h3>
+              <p>The real test: years the models were never fitted on. Everything left of the line is memory. Everything right of it is prediction.</p>
+            </div>
+            <div class="cs-step cs-sent-step" data-step="3">
+              <span class="label">Step 4 · Test</span>
+              <h3 class="h3">Out-of-sample, buy-and-hold wins.</h3>
+              <p>On held-out data the edge disappears and the models fall behind the index. The in-sample gains were overfitting — the models had learned the noise.</p>
+            </div>
+          </div>
+        </div>
+        <figure class="cs-figure cs-sent-chart">
+          <ul class="cs-sent-legend" aria-label="Legend">
+            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--ink)" stroke-width="2"/></svg>Buy &amp; hold</li>
+            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--accent)" stroke-width="1.5"/></svg>LASSO</li>
+            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 3"/></svg>Ridge</li>
+            <li><svg viewBox="0 0 22 8" aria-hidden="true"><line x1="0" y1="4" x2="22" y2="4" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="1.5 3"/></svg>Elastic Net</li>
+          </ul>
+          <div class="cs-figure-frame">
+            <canvas id="sent-canvas" role="img" aria-label="Illustrative chart. A daily sentiment series runs along the bottom. In the in-sample region, LASSO, Ridge and Elastic Net equity curves rise above buy-and-hold. A train/test split line then appears; in the out-of-sample region the three model curves fall back below buy-and-hold."></canvas>
+          </div>
+          <figcaption><span class="label">Fig. 1</span> Growth of a dollar, log scale, with daily sentiment beneath. <span class="note">Illustrative series — the shape of the finding, not the actual data.</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ §03 Regularisation explainer ============ -->
+  <section class="cs-chapter wrap" aria-labelledby="ch3">
+    <div class="cs-chapter-head">
+      <span class="cs-num">§ 03</span>
+      <h2 class="h2" id="ch3" data-split>Three ways to say less</h2>
+    </div>
+    <div class="cs-chapter-body">
+      <p class="body" data-reveal>Penalised regression is the textbook defence against overfitting: charge the model for every coefficient it relies on, and it has to choose. The penalty strength, <strong>λ</strong>, sets the price. The three models differ in <em>how</em> they charge.</p>
+      <p class="body" data-reveal>Drag the slider. Watch what each one does to the same eight coefficients.</p>
+    </div>
+
+    <div class="cs-sent-reg" data-reveal>
+      <div class="cs-sent-controls">
+        <div class="cs-tabs" role="tablist" aria-label="Regularisation method">
+          <button class="cs-tab" role="tab" id="tab-lasso" aria-selected="true" aria-controls="reg-panel" data-m="lasso">LASSO</button>
+          <button class="cs-tab" role="tab" id="tab-ridge" aria-selected="false" aria-controls="reg-panel" data-m="ridge" tabindex="-1">Ridge</button>
+          <button class="cs-tab" role="tab" id="tab-enet" aria-selected="false" aria-controls="reg-panel" data-m="enet" tabindex="-1">Elastic Net</button>
+        </div>
+        <div class="cs-sent-lam">
+          <div class="row"><label class="label" for="lam">Penalty strength (λ)</label><output id="lam-out" for="lam">0.35</output></div>
+          <input class="cs-range" type="range" id="lam" min="0" max="100" value="35" aria-describedby="reg-explain">
+          <div class="ends"><span class="note">Weak — fits everything</span><span class="note">Strong — fits little</span></div>
+        </div>
+        <div class="cs-sent-explain" id="reg-explain" aria-live="polite">
+          <h3 class="h3" data-x="title">LASSO · L1 penalty</h3>
+          <p data-x="text">Shrinks every coefficient by the same amount — and once a weak one hits zero, it stays there. Built-in feature selection.</p>
+        </div>
+        <div class="cs-sent-read">
+          <div><b id="reg-nz">8/8</b><span class="label">Coefficients kept</span></div>
+          <div><b id="reg-mass">100%</b><span class="label">Total weight left</span></div>
+        </div>
+      </div>
+      <figure class="cs-figure" id="reg-panel" role="tabpanel" aria-labelledby="tab-lasso">
+        <ul class="cs-sent-bars" id="reg-bars" aria-label="Coefficient values"></ul>
+        <div class="cs-sent-axis" aria-hidden="true"><span></span><div><span class="note">− negative</span><span class="note">0</span><span class="note">positive +</span></div><span></span></div>
+        <figcaption><span class="label">Fig. 2</span> Dashed outline: unpenalised fit. Solid: after the penalty. <span class="note">Illustrative coefficients — not the study's model.</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="cs-chapter-body" style="margin-top:clamp(24px,4vw,48px)">
+      <p class="body" data-reveal>All three helped the models behave <em>inside</em> the sample. None of them could manufacture a signal that wasn't there. A penalty decides how much a model trusts its inputs; it can't make the inputs predictive.</p>
+    </div>
+  </section>
+
+  <!-- ============ Pull quote ============ -->
+  <blockquote class="cs-pull wrap" data-reveal>
+    <p>In-sample is a story you tell yourself. <em>Out-of-sample is the market's reply.</em></p>
+    <cite class="label">— The finding, in one line</cite>
+  </blockquote>
+
+  <!-- ============ §04 Takeaways + deliverables ============ -->
+  <section class="wrap cs-sent-close" aria-labelledby="ch4">
+    <div class="sect-head" data-reveal>
+      <span class="num">§ 04</span><span class="title" id="ch4">What I'd do next</span><span class="fill"></span><span class="aside">Next steps, not done</span>
+    </div>
+    <ol class="cs-takeaways">
+      <li data-reveal><span class="cs-num">01</span><div><h3 class="h3">Walk-forward validation</h3><p class="body">One split is one draw. Re-fitting on a rolling window and testing on the next slice, again and again, would show whether the failure is consistent or unlucky.</p></div></li>
+      <li data-reveal style="--d:.08s"><span class="cs-num">02</span><div><h3 class="h3">Transaction costs</h3><p class="body">Daily repositioning isn't free. Adding costs and slippage would raise the bar a signal has to clear — and make any in-sample edge look smaller still.</p></div></li>
+      <li data-reveal><span class="cs-num">03</span><div><h3 class="h3">Better sentiment, same scepticism</h3><p class="body">Richer text models might read tone more accurately. Worth testing — under exactly the same held-out discipline, so a better input can't hide a worse habit.</p></div></li>
+      <li data-reveal style="--d:.08s"><span class="cs-num">04</span><div><h3 class="h3">Regimes and multiple testing</h3><p class="body">Check whether any signal lives only in specific market regimes, and adjust for how many variations get tried — the more you test, the easier it is to find luck.</p></div></li>
+    </ol>
+
+    <div class="sect-head" data-reveal>
+      <span class="num">§ 05</span><span class="title">Deliverables</span><span class="fill"></span><span class="aside">Research report + presentation</span>
+    </div>
+    <div class="cs-deliverables">
+      <div class="cs-doc card" data-reveal>
+        <div class="top"><span class="label">Document</span><span class="label">01</span></div>
+        <h3 class="h3">Research report</h3>
+        <p>Data, method, in- and out-of-sample results, and a plain section on the limits of the approach.</p>
+        <div class="lines" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+      <div class="cs-doc card" data-reveal style="--d:.08s">
+        <div class="top"><span class="label">Deck</span><span class="label">02</span></div>
+        <h3 class="h3">Presentation</h3>
+        <p>The same story, shorter: question, models, the split, and why the negative result is the result.</p>
+        <div class="lines" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <p class="cs-sent-ask body" data-reveal>Happy to walk through either — <a class="link-u" href="mailto:codeabhay3@gmail.com" data-no-curtain>codeabhay3@gmail.com</a>.</p>
+  </section>
+
+</main>
+<script src="../assets/js/site.js?v=2" defer></script>
+<script src="../assets/js/sentiment.js?v=2" defer></script>
+</body>
+</html>

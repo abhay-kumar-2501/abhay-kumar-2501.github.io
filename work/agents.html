@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents at Market — Abhay Kumar</title>
+<meta name="description" content="Case 02.2 — As an undergraduate research assistant at Penn State Smeal, I built a Python pricing simulation in which four AI agents replicate a human-participant economics experiment.">
+<meta name="theme-color" content="#f4f1e9">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<script>(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css?v=2">
+<link rel="stylesheet" href="../assets/css/work.css?v=2">
+<link rel="stylesheet" href="../assets/css/agents.css?v=2">
+</head>
+<body data-page="case" data-root="../" data-next="record" class="cs-agents">
+<main id="main">
+
+  <!-- ============ Hero ============ -->
+  <header class="cs-hero ag-hero">
+    <div class="wrap">
+      <a class="cs-back label ag-back" href="index.html" data-reveal="fade"><span aria-hidden="true">←</span> Selected Work</a>
+      <p class="eyebrow ag-hero-eyebrow" data-reveal style="--d:.05s">02.2 — Research</p>
+      <h1 class="h1 cs-title ag-title" data-split>Agents at Market</h1>
+      <p class="lede cs-question ag-question" data-reveal style="--d:.35s">What happens when the participants in an economics experiment are <em>AI agents</em>?</p>
+
+      <svg class="ag-hero-line" data-observe viewBox="0 0 1000 60" preserveAspectRatio="none" aria-hidden="true">
+        <path pathLength="1" d="M0 44 L70 40 L130 46 L190 34 L260 38 L330 26 L400 32 L470 22 L540 30 L610 18 L690 24 L760 14 L840 20 L910 10 L1000 14" />
+      </svg>
+
+      <dl class="cs-meta ag-meta">
+        <div data-reveal style="--d:.1s"><dt class="label">Role</dt><dd>Undergraduate Research Assistant, Smeal College of Business, Penn State</dd></div>
+        <div data-reveal style="--d:.18s"><dt class="label">Timeline</dt><dd><span class="figure">May – Aug 2026</span></dd></div>
+        <div data-reveal style="--d:.26s"><dt class="label">Tools</dt><dd>Python · LLM agents</dd></div>
+        <div data-reveal style="--d:.34s"><dt class="label">Scope</dt><dd><span class="figure"><span data-count="4">4</span> agents · <span data-count="20" data-suffix="+">20+</span> trials</span></dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <!-- ============ Chapter 01 — The setup ============ -->
+  <section class="ag-chapter" aria-labelledby="ag-setup-h">
+    <div class="wrap">
+      <div class="sect-head" data-reveal="fade">
+        <span class="num">§ 01</span><span class="title">The setup</span><span class="fill"></span><span class="aside">Chapter one</span>
+      </div>
+      <div class="grid-12">
+        <h2 class="h2 ag-ch-title" id="ag-setup-h" data-split>Same experiment. Different participants.</h2>
+        <div class="ag-ch-body">
+          <p class="body" data-reveal>Economics experiments usually run on people. Participants set prices, make offers and react to what they know &mdash; and to what they don&rsquo;t. Over the summer my job was to rebuild one of those experiments with AI agents sitting in the participants&rsquo; seats.</p>
+          <p class="body" data-reveal style="--d:.08s">I wrote the simulation in Python: four AI agents, a market, and the pricing and market rules that decide what each agent sees and how offers become a price. Not every participant knows the same things. That <em>information asymmetry</em> is the condition the agents&rsquo; decisions are evaluated under.</p>
+          <p class="body" data-reveal style="--d:.16s">Then I ran it, analysed the results, took them to faculty, and revised the rules. Then I did it again.</p>
+          <ul class="ag-facts" data-reveal style="--d:.22s">
+            <li><span class="figure">4</span><span class="label">AI agents</span></li>
+            <li><span class="figure">1</span><span class="label">Human experiment, replicated</span></li>
+            <li><span class="figure">20+</span><span class="label">Trials</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Playground (signature interactive) ============ -->
+  <section class="ag-play-sec" aria-labelledby="ag-play-h">
+    <div class="wrap">
+      <div class="sect-head" data-reveal="fade">
+        <span class="num">§ 02</span><span class="title">Market playground</span><span class="fill"></span><span class="aside">Toy model</span>
+      </div>
+      <div class="ag-play-intro">
+        <h2 class="h3" id="ag-play-h" data-reveal>Four agents, one price. Widen the gap and watch the price drift.</h2>
+        <p class="body" data-reveal style="--d:.08s">A1 and A2 see a hidden value clearly. A3 and A4 see it through fog and lean on the last price instead. Each round, every agent sends an offer; the rules turn those offers into a price.</p>
+      </div>
+
+      <figure class="cs-figure ag-play" id="ag-play" data-observe>
+        <div class="ag-stage">
+          <div class="ag-net-wrap">
+            <canvas class="ag-net" role="img" aria-label="Diagram: four agents, A1 and A2 informed, A3 and A4 uninformed, each sending offers to a central market that sets the price."></canvas>
+          </div>
+          <div class="ag-chart-col">
+            <div class="ag-readouts" aria-hidden="true">
+              <div><span class="label">Round</span><b class="figure" data-ro="round">00</b></div>
+              <div><span class="label">Price</span><b class="figure accent" data-ro="price">100.00</b></div>
+              <div><span class="label">Hidden value</span><b class="figure" data-ro="value">100.00</b></div>
+              <div><span class="label">Mispricing</span><b class="figure" data-ro="miss">0.00</b></div>
+            </div>
+            <div class="ag-chart-wrap">
+              <canvas class="ag-chart" role="img" aria-label="Line chart of the toy market price against the hidden value across rounds."></canvas>
+            </div>
+            <div class="ag-legend label" aria-hidden="true">
+              <span><i class="sw sw-price"></i>Market price</span>
+              <span><i class="sw sw-value"></i>Hidden value</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ag-controls">
+          <div class="ag-btns">
+            <button type="button" class="btn btn--solid ag-run">Run round <span class="arr" aria-hidden="true">→</span></button>
+            <button type="button" class="btn ag-auto" aria-pressed="false">Auto-play</button>
+            <button type="button" class="ag-reset label">Reset</button>
+          </div>
+          <div class="ag-ctl ag-ctl-gap">
+            <div class="ag-ctl-head">
+              <label for="ag-gap" class="label">Information gap</label>
+              <output for="ag-gap" class="figure" id="ag-gap-out">0.60</output>
+            </div>
+            <input type="range" id="ag-gap" min="0" max="100" step="5" value="60" aria-describedby="ag-gap-desc">
+            <p class="note" id="ag-gap-desc">How much less A3 and A4 know about the hidden value.</p>
+          </div>
+          <fieldset class="ag-ctl ag-seg">
+            <legend class="label">Rules version</legend>
+            <div class="ag-seg-row">
+              <input type="radio" name="ag-rules" id="ag-r1" value="v1" checked><label for="ag-r1">v1</label>
+              <input type="radio" name="ag-rules" id="ag-r2" value="v2"><label for="ag-r2">v2 · revised</label>
+            </div>
+            <p class="note ag-rules-desc" aria-live="polite">v1: price is the average of all offers.</p>
+          </fieldset>
+        </div>
+
+        <p class="sr-only" aria-live="polite" id="ag-live"></p>
+        <figcaption class="note ag-note">Interactive toy model for illustration — not the research code or its results.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ Sticky scene — Iteration ============ -->
+  <section class="ag-iter" data-scene aria-labelledby="ag-iter-h">
+    <div class="ag-iter-sticky">
+      <div class="wrap ag-iter-grid">
+        <div class="ag-iter-copy">
+          <div class="sect-head ag-iter-head">
+            <span class="num">§ 03</span><span class="title">Iteration</span><span class="fill"></span>
+          </div>
+          <h2 class="h2" id="ag-iter-h">The same loop, run again and again.</h2>
+          <ol class="ag-loop" aria-label="Research loop">
+            <li data-step="0"><span class="figure">01</span><span class="ag-loop-t">Design</span><span class="ag-loop-d">Write the pricing and market rules.</span></li>
+            <li data-step="1"><span class="figure">02</span><span class="ag-loop-t">Run</span><span class="ag-loop-d">Four agents play the market.</span></li>
+            <li data-step="2"><span class="figure">03</span><span class="ag-loop-t">Review</span><span class="ag-loop-d">Analyse the results with faculty.</span></li>
+            <li data-step="3"><span class="figure">04</span><span class="ag-loop-t">Revise</span><span class="ag-loop-d">Change the rules. Go again.</span></li>
+          </ol>
+          <div class="ag-counter">
+            <span class="label">Trial</span>
+            <span class="figure ag-counter-n" aria-hidden="true">01</span>
+            <span class="label ag-counter-of">of 20+</span>
+          </div>
+        </div>
+        <div class="ag-stack-col" aria-hidden="true">
+          <div class="ag-stack"></div>
+          <div class="ag-iter-bar"><i></i></div>
+        </div>
+      </div>
+      <p class="note ag-iter-note wrap">Schematic of the research loop. Card contents are illustrative.</p>
+    </div>
+  </section>
+
+  <!-- ============ Chapter — What I learned ============ -->
+  <section class="ag-chapter ag-learned" aria-labelledby="ag-learn-h">
+    <div class="wrap">
+      <div class="sect-head" data-reveal="fade">
+        <span class="num">§ 04</span><span class="title">What I learned</span><span class="fill"></span><span class="aside">Chapter four</span>
+      </div>
+      <h2 class="h2 ag-learn-title" id="ag-learn-h" data-split>Lessons from the rulebook.</h2>
+      <ol class="ag-lessons">
+        <li data-reveal>
+          <span class="figure accent">01</span>
+          <h3 class="h3">Fair rules are the hard part.</h3>
+          <p class="body">Every pricing and market rule is a decision about what the market rewards. When a rule is loose, it shows up in the results before it shows up in the code.</p>
+        </li>
+        <li data-reveal style="--d:.08s">
+          <span class="figure accent">02</span>
+          <h3 class="h3">Replication forces precision.</h3>
+          <p class="body">Human participants read instructions and fill gaps sensibly. A simulation can&rsquo;t. Rebuilding the experiment meant writing down assumptions people never have to state: who sees what, when, and what counts as a valid offer.</p>
+        </li>
+        <li data-reveal style="--d:.16s">
+          <span class="figure accent">03</span>
+          <h3 class="h3">Feedback is a loop, not a checkpoint.</h3>
+          <p class="body">Results went to faculty; revised rules came back. Over twenty-plus trials the design improved by iteration rather than by one good idea &mdash; which is slower, and more honest.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ Pull quote ============ -->
+  <section class="ag-pull-sec">
+    <div class="wrap">
+      <blockquote class="cs-pull ag-pull" data-reveal>
+        <p>Putting AI agents into a human experiment doesn&rsquo;t remove the assumptions. It makes you <em>write every one of them down.</em></p>
+        <cite class="label">— On rebuilding the experiment</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ============ Takeaways ============ -->
+  <section class="ag-takeaways" aria-labelledby="ag-take-h">
+    <div class="wrap">
+      <div class="sect-head" data-reveal="fade">
+        <span class="num">§ 05</span><span class="title" id="ag-take-h">Takeaways</span><span class="fill"></span><span class="aside">For the file</span>
+      </div>
+      <ul class="ag-take-list">
+        <li data-reveal><span class="label">Built</span><p>A Python pricing simulation in which four AI agents replicate a human-participant economics experiment.</p></li>
+        <li data-reveal style="--d:.06s"><span class="label">Implemented</span><p>The pricing and market rules used to evaluate AI-agent decisions under information asymmetry.</p></li>
+        <li data-reveal style="--d:.12s"><span class="label">Iterated</span><p>Analysed trial results and revised the rules across <span class="figure">20+</span> trials after faculty feedback.</p></li>
+        <li data-reveal style="--d:.18s"><span class="label">Kept</span><p>A habit: treat rule design as model design, and expect to rewrite it.</p></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+<script src="../assets/js/site.js?v=2" defer></script>
+<script src="../assets/js/agents.js?v=2" defer></script>
+</body>
+</html>
