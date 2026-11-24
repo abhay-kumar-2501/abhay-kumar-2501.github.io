@@ -23,7 +23,7 @@ body.cs-agents .ag-meta { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1f
 body.cs-agents .ag-meta > div { padding: 16px 20px 4px 0; border-right: 1px solid var(--rule); margin-right: 20px; }
 body.cs-agents .ag-meta > div:last-child { border-right: 0; margin-right: 0; }
 body.cs-agents .ag-meta dt { margin-bottom: 8px; }
-body.cs-agents .ag-meta dt { font-size: 11px; }
+body.cs-agents .ag-meta dt { font-size: 12px; }
 body.cs-agents .ag-meta dd { margin: 0; font-family: var(--serif); font-size: clamp(18px, 1.6vw, 21px); line-height: 1.3; color: var(--ink); }
 body.cs-agents .ag-meta .figure { font-size: .82em; letter-spacing: 0; }
 
@@ -43,7 +43,7 @@ body.cs-agents .ag-ch-body em { color: var(--ink); }
 body.cs-agents .ag-facts { list-style: none; padding: 0; margin: 36px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); }
 body.cs-agents .ag-facts li { padding: 16px 12px 0 0; display: flex; flex-direction: column; gap: 6px; }
 body.cs-agents .ag-facts .figure { font-size: clamp(30px, 3.4vw, 44px); line-height: 1; color: var(--ink); }
-body.cs-agents .ag-facts .label { font-size: 11px; line-height: 1.4; }
+body.cs-agents .ag-facts .label { font-size: 12px; line-height: 1.4; }
 
 /* ---------- Playground ---------- */
 body.cs-agents .ag-play-sec { padding: clamp(40px, 6vw, 80px) 0 clamp(80px, 11vw, 160px); }
@@ -60,11 +60,11 @@ body.cs-agents .ag-chart-col { display: flex; flex-direction: column; min-width:
 body.cs-agents .ag-readouts { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--rule); }
 body.cs-agents .ag-readouts > div { padding: 14px 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 body.cs-agents .ag-readouts > div:last-child { border-right: 0; }
-body.cs-agents .ag-readouts .label { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body.cs-agents .ag-readouts .label { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 body.cs-agents .ag-readouts b { font-weight: 400; font-size: clamp(18px, 1.9vw, 24px); line-height: 1.1; color: var(--ink); }
 body.cs-agents .ag-readouts b.accent { color: var(--accent); }
 body.cs-agents .ag-chart-wrap { position: relative; flex: 1; min-height: 240px; }
-body.cs-agents .ag-legend { display: flex; gap: 20px; padding: 12px 16px; border-top: 1px solid var(--rule); font-size: 10px; }
+body.cs-agents .ag-legend { display: flex; gap: 20px; padding: 12px 16px; border-top: 1px solid var(--rule); font-size: 12px; }
 body.cs-agents .ag-legend span { display: inline-flex; align-items: center; gap: 8px; }
 body.cs-agents .ag-legend .sw { display: inline-block; width: 18px; height: 0; border-top: 1.5px solid var(--accent); }
 body.cs-agents .ag-legend .sw-value { border-top: 1px dashed var(--ink-3); }
@@ -106,7 +106,17 @@ body.cs-agents .ag-seg input:checked + label { background: var(--ink); color: va
 body.cs-agents .ag-seg input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
 body.cs-agents .ag-rules-desc { max-width: 30ch; }
 
-body.cs-agents .ag-play figcaption.ag-note { display: block; margin: 0; padding: 12px 24px; border-top: 1px solid var(--rule); background: var(--paper-2); font-size: 11px; color: var(--ink-3); }
+body.cs-agents .ag-play figcaption.ag-note { display: block; margin: 0; padding: 12px 24px; border-top: 1px solid var(--rule); background: var(--paper-2); font-size: 12px; color: var(--ink-3); }
+
+/* "Try it" chip — sits with the controls, leaves after the first interaction */
+body.cs-agents .ag-try { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 0 4px; padding: 4px 12px 4px 4px; border: 1px solid var(--accent);
+  border-radius: 999px; font-size: 13px; color: var(--accent); background: var(--accent-soft);
+  transition: opacity .45s var(--ease), transform .45s var(--ease); animation: ag-try-in .6s var(--ease) both; }
+body.cs-agents .ag-try-k { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--accent); color: var(--paper);
+  font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+body.cs-agents .ag-try.is-gone { opacity: 0; transform: translateX(-6px); pointer-events: none; }
+@keyframes ag-try-in { from { opacity: 0; transform: translateX(-8px); } }
+@media (max-width: 800px) { body.cs-agents .ag-try { margin: 4px 0 0; } }
 
 @media (max-width: 1000px) {
   body.cs-agents .ag-controls { grid-template-columns: 1fr 1fr; }
@@ -162,7 +172,7 @@ body.cs-agents .ag-card-spark { height: 70px; width: 100%; border-bottom: 1px so
 body.cs-agents .ag-card-spark path { fill: none; stroke: var(--ink-3); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
 body.cs-agents .ag-card.is-top .ag-card-spark path { stroke: var(--accent); }
 body.cs-agents .ag-card-rows { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-body.cs-agents .ag-card-rows li { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3);
+body.cs-agents .ag-card-rows li { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3);
   display: flex; flex-direction: column; gap: 8px; }
 body.cs-agents .ag-card-rows li i { display: block; height: 3px; border-radius: 2px; background: var(--rule); position: relative; overflow: hidden; }
 body.cs-agents .ag-card-rows li i::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform-origin: 0 50%; transform: scaleX(var(--f, 0)); }

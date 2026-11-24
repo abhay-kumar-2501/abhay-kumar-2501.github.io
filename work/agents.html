@@ -5,14 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Agents at Market — Abhay Kumar</title>
 <meta name="description" content="Case 02.2 — As an undergraduate research assistant at Penn State Smeal, I built a Python pricing simulation in which four AI agents replicate a human-participant economics experiment.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Agents at Market — Abhay Kumar">
+<meta property="og:description" content="Case 02.2 — As an undergraduate research assistant at Penn State Smeal, I built a Python pricing simulation in which four AI agents replicate a human-participant economics experiment.">
+<meta property="og:url" content="https://abhay-kumar-2501.github.io/work/agents.html">
+<meta property="og:image" content="https://abhay-kumar-2501.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f4f1e9">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-<script>(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
+<script>document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/base.css?v=3">
-<link rel="stylesheet" href="../assets/css/work.css?v=3">
-<link rel="stylesheet" href="../assets/css/agents.css?v=3">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..500,0..100,0..1;1,9..144,400,0..100,0..1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css?v=5">
+<link rel="stylesheet" href="../assets/css/work.css?v=5">
+<link rel="stylesheet" href="../assets/css/agents.css?v=5">
 </head>
 <body data-page="case" data-root="../" data-next="record" class="cs-agents">
 <main id="main">
@@ -42,7 +48,7 @@
   <section class="ag-chapter" aria-labelledby="ag-setup-h">
     <div class="wrap">
       <div class="sect-head" data-reveal="fade">
-        <span class="num">§ 01</span><span class="title">The setup</span><span class="fill"></span><span class="aside">Chapter one</span>
+        <span class="num">§ 01</span><span class="title">The setup</span><span class="fill"></span>
       </div>
       <div class="grid-12">
         <h2 class="h2 ag-ch-title" id="ag-setup-h" data-split>Same experiment. Different participants.</h2>
@@ -64,7 +70,7 @@
   <section class="ag-play-sec" aria-labelledby="ag-play-h">
     <div class="wrap">
       <div class="sect-head" data-reveal="fade">
-        <span class="num">§ 02</span><span class="title">Market playground</span><span class="fill"></span><span class="aside">Toy model</span>
+        <span class="num">§ 02</span><span class="title">Market playground</span><span class="sect-sub">— a toy version you can run</span><span class="fill"></span>
       </div>
       <div class="ag-play-intro">
         <h2 class="h3" id="ag-play-h" data-reveal>Four agents, one price. Widen the gap and watch the price drift.</h2>
@@ -98,6 +104,7 @@
             <button type="button" class="btn btn--solid ag-run">Run round <span class="arr" aria-hidden="true">→</span></button>
             <button type="button" class="btn ag-auto" aria-pressed="false">Auto-play</button>
             <button type="button" class="ag-reset label">Reset</button>
+            <p class="ag-try" id="ag-try" aria-hidden="true"><span class="ag-try-k">Try it</span><span class="ag-try-t">Run a round, or change the gap and rules</span></p>
           </div>
           <div class="ag-ctl ag-ctl-gap">
             <div class="ag-ctl-head">
@@ -118,7 +125,7 @@
         </div>
 
         <p class="sr-only" aria-live="polite" id="ag-live"></p>
-        <figcaption class="note ag-note">Interactive toy model for illustration — not the research code or its results.</figcaption>
+        <figcaption class="note ag-note">Toy model — not the research code or its results.</figcaption>
       </figure>
     </div>
   </section>
@@ -129,7 +136,7 @@
       <div class="wrap ag-iter-grid">
         <div class="ag-iter-copy">
           <div class="sect-head ag-iter-head">
-            <span class="num">§ 03</span><span class="title">Iteration</span><span class="fill"></span>
+            <span class="num">§ 03</span><span class="title">Iteration</span><span class="sect-sub">— how the design improved</span><span class="fill"></span>
           </div>
           <h2 class="h2" id="ag-iter-h">The same loop, run again and again.</h2>
           <ol class="ag-loop" aria-label="Research loop">
@@ -149,7 +156,7 @@
           <div class="ag-iter-bar"><i></i></div>
         </div>
       </div>
-      <p class="note ag-iter-note wrap">Schematic of the research loop. Card contents are illustrative.</p>
+      <p class="note ag-iter-note wrap">Schematic — card contents are illustrative.</p>
     </div>
   </section>
 
@@ -157,7 +164,7 @@
   <section class="ag-chapter ag-learned" aria-labelledby="ag-learn-h">
     <div class="wrap">
       <div class="sect-head" data-reveal="fade">
-        <span class="num">§ 04</span><span class="title">What I learned</span><span class="fill"></span><span class="aside">Chapter four</span>
+        <span class="num">§ 04</span><span class="title">What I learned</span><span class="fill"></span>
       </div>
       <h2 class="h2 ag-learn-title" id="ag-learn-h" data-split>Lessons from the rulebook.</h2>
       <ol class="ag-lessons">
@@ -194,7 +201,7 @@
   <section class="ag-takeaways" aria-labelledby="ag-take-h">
     <div class="wrap">
       <div class="sect-head" data-reveal="fade">
-        <span class="num">§ 05</span><span class="title" id="ag-take-h">Takeaways</span><span class="fill"></span><span class="aside">For the file</span>
+        <span class="num">§ 05</span><span class="title" id="ag-take-h">Takeaways</span><span class="sect-sub">— the short version</span><span class="fill"></span>
       </div>
       <ul class="ag-take-list">
         <li data-reveal><span class="label">Built</span><p>A Python pricing simulation in which four AI agents replicate a human-participant economics experiment.</p></li>
@@ -206,7 +213,7 @@
   </section>
 
 </main>
-<script src="../assets/js/site.js?v=3" defer></script>
-<script src="../assets/js/agents.js?v=3" defer></script>
+<script src="../assets/js/site.js?v=5" defer></script>
+<script src="../assets/js/agents.js?v=5" defer></script>
 </body>
 </html>

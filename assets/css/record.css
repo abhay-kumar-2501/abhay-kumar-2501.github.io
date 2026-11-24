@@ -18,7 +18,7 @@
 @media (max-width: 600px) {
   .rec-period { width: 100%; }
   .rec-period > div { flex: 1; padding-right: 10px; margin-right: 10px; }
-  .rec-period dd { font-size: 13px; }
+  .rec-period dd { font-size: 14px; }
 }
 
 /* ---------- Education statement ---------- */
@@ -29,7 +29,7 @@
 .stmt-head .h2 { max-width: 18ch; }
 .stmt-loc { margin: 10px 0 0; color: var(--ink-3); font-family: var(--serif); font-style: italic; font-size: 18px; }
 .stmt-stamp { flex: none; display: grid; text-align: center; border: 1px solid var(--accent); color: var(--accent); border-radius: 4px; padding: 10px 16px;
-  font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-3deg); }
+  font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-3deg); }
 .stmt-stamp b { font-weight: 500; font-size: 15px; letter-spacing: .02em; margin-top: 2px; }
 
 .stmt-degrees { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--rule); }
@@ -79,7 +79,7 @@
 .filter-l { margin-right: 6px; }
 .chip { height: 36px; padding: 0 14px; border: 1px solid var(--rule); border-radius: 999px; font-size: 14px; color: var(--ink-2);
   display: inline-flex; align-items: center; gap: 8px; transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease); }
-.chip .figure { font-size: 11px; color: var(--ink-3); transition: color .3s; }
+.chip .figure { font-size: 12px; color: var(--ink-3); transition: color .3s; }
 .chip:hover { border-color: var(--ink); color: var(--ink); }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .chip[aria-pressed="true"] .figure { color: var(--paper); opacity: .7; }
@@ -106,7 +106,7 @@
   gap: 14px 32px; padding: 0 0 clamp(48px, 6vw, 80px); }
 .entry-meta { grid-area: meta; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .entry-date { font-size: 13px; color: var(--ink); letter-spacing: 0; }
-.entry-cat { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.entry-cat { font-family: var(--sans); font-weight: 500; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .entry-main { grid-area: main; border-top: 1px solid var(--rule); padding-top: 16px; }
 .entry-org { margin: 0 0 4px; font-size: 14px; color: var(--ink-3); }
 .entry .h3 { margin: 0; }
@@ -141,14 +141,15 @@
 
 @media (max-width: 860px) {
   .tl { grid-template-columns: 1fr; gap: 0; }
-  .tl-year { position: sticky; top: calc(var(--header-h) + 12px); z-index: 5; height: 0; justify-self: end; }
+  /* Pin the chip below the fixed 64px header (never under it). */
+  .tl-year { position: sticky; top: calc(var(--header-h) + 14px); z-index: 5; height: 0; justify-self: end; }
   .tl-year-in { position: static; display: inline-flex; align-items: center; gap: 10px; background: var(--paper); border: 1px solid var(--rule);
     border-radius: 999px; padding: 6px 14px; }
-  .tl-year-in .label { font-size: 10px; }
+  .tl-year-in .label { font-size: 12px; }
   .tl-year-num { font-family: var(--mono); font-size: 15px; letter-spacing: 0; height: 1.1em; width: 4ch; }
   .tl-body { --rail: 36px; --sx: 6px; }
   .entry { grid-template-columns: 1fr; grid-template-areas: "meta" "main" "fig"; gap: 10px; }
-  .entry-meta { padding-right: 120px; min-height: 26px; }
+  .entry-meta { padding-right: 170px; min-height: 26px; }
   .entry-fig { text-align: left; display: flex; align-items: baseline; gap: 10px; border-top: 1px dotted var(--rule); padding-top: 10px; }
   .entry-fig .figure { font-size: 24px; }
   .entry-pts { font-size: 15px; }
@@ -192,5 +193,15 @@
 @media (max-width: 700px) { .notes { grid-template-columns: 1fr; } .note-blk:nth-child(2) { grid-row: auto; } .rec-dl .btn { width: 100%; justify-content: center; } }
 .entry-fig--word .figure { font-size: clamp(18px, 1.8vw, 24px); white-space: nowrap; }
 
-/* Section heads: drop the aside on phones so the rule stays on one line. */
-@media (max-width: 600px) { .sect-head .aside { display: none; } }
+/* Section heads: plain-English subtitle beside the report conceit. */
+.sect-head .sect-plain { font-family: var(--sans); font-size: 15px; color: var(--ink-2); letter-spacing: 0; text-transform: none; }
+.sect-head .sect-plain::before { content: "— "; color: var(--ink-3); }
+/* Phones: drop the aside; the subtitle takes its own line under the rule label. */
+@media (max-width: 600px) {
+  .sect-head { flex-wrap: wrap; row-gap: 6px; }
+  .sect-head .aside { display: none; }
+  .sect-head .sect-plain { order: 5; flex-basis: 100%; }
+  .sect-head .sect-plain::before { content: none; }
+}
+
+.entry[id] { scroll-margin-top: calc(var(--header-h) + 96px); }

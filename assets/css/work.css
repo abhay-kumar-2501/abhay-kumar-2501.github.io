@@ -9,7 +9,8 @@
 /* =========================================================
    1. WORK INDEX
    ========================================================= */
-.wi-hero { padding: calc(var(--header-h) + clamp(56px, 10vw, 140px)) 0 clamp(48px, 7vw, 96px); }
+/* padding-top/bottom only: a shorthand here would wipe .wrap's side gutters and pull the hero off the column */
+.wi-hero { padding-top: calc(var(--header-h) + clamp(56px, 10vw, 140px)); padding-bottom: clamp(48px, 7vw, 96px); }
 .wi-hero .eyebrow { margin: 0 0 28px; }
 .wi-hero .h1 { max-width: 13ch; }
 .wi-hero-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; margin-top: clamp(32px, 4vw, 56px); }
@@ -23,7 +24,7 @@
 .wi-filters .label { margin-right: 8px; }
 .wi-chip { height: 34px; padding: 0 14px; border: 1px solid var(--rule); border-radius: 999px; font-family: var(--mono); font-size: 12px;
   letter-spacing: .04em; color: var(--ink-2); display: inline-flex; align-items: center; gap: 8px; transition: border-color .3s var(--ease), color .3s, background .3s; }
-.wi-chip .c { font-size: 10px; color: var(--ink-3); transition: color .3s; }
+.wi-chip .c { font-size: 12px; color: var(--ink-3); transition: color .3s; }
 .wi-chip:hover { border-color: var(--ink); color: var(--ink); }
 .wi-chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .wi-chip[aria-pressed="true"] .c { color: var(--paper); opacity: .6; }
@@ -65,9 +66,9 @@
   .wi-row .go { margin-top: 6px; }
   .wi-row .num { padding-top: 10px; }
   .wi-row .ttl small { font-size: 14px; }
-  .wi-mobile-meta { display: block !important; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+  .wi-mobile-meta { display: block !important; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
   .wi-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px 0 14px 70px; border-bottom: 1px solid var(--rule);
-    font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+    font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
   .wi-toggle .pm { width: 22px; height: 22px; border: 1px solid var(--rule); border-radius: 50%; display: grid; place-items: center; transition: transform .4s var(--ease); }
   .wi-toggle[aria-expanded="true"] .pm { transform: rotate(45deg); }
   .wi-detail { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s var(--ease); }
@@ -125,7 +126,7 @@
 .cs-meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: clamp(48px, 7vw, 96px) 0 0; border-top: 1px solid var(--ink); }
 .cs-meta > div { padding: 16px 20px 0 0; border-right: 1px solid var(--rule); margin-right: 20px; }
 .cs-meta > div:last-child { border-right: 0; margin-right: 0; }
-.cs-meta dt { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.cs-meta dt { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
 .cs-meta dd { margin: 0; font-family: var(--serif); font-size: clamp(18px, 1.6vw, 21px); line-height: 1.3; }
 .cs-meta .cs-meta-outcome dd { color: var(--accent); font-style: italic; }
 @media (max-width: 800px) {
@@ -193,9 +194,9 @@
 .cs-doc { padding: 24px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; position: relative; overflow: hidden; }
 .cs-doc .top { display: flex; justify-content: space-between; }
 .cs-doc p { margin: 0; color: var(--ink-2); font-size: 15px; }
-.cs-doc .lines { margin-top: auto; display: grid; gap: 6px; }
-.cs-doc .lines i { display: block; height: 1px; background: var(--rule); }
-.cs-doc .lines i:nth-child(2) { width: 82%; } .cs-doc .lines i:nth-child(3) { width: 64%; }
+.cs-doc .top .label:last-child { color: var(--accent); }
+.cs-doc .cs-doc-ask { margin-top: auto; padding-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.cs-doc .cs-doc-ask .btn { height: 42px; font-size: 14px; }
 @media (max-width: 700px) { .cs-deliverables { grid-template-columns: 1fr; } .cs-doc { min-height: 0; } }
 
 /* Controls */
@@ -222,7 +223,7 @@
 .cs-sent-stage { height: 100%; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
 .cs-sent-side { display: flex; flex-direction: column; gap: 28px; }
 .cs-sent-ticks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; list-style: none; margin: 0; padding: 0; }
-.cs-sent-ticks li { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); transition: color .4s; }
+.cs-sent-ticks li { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); transition: color .4s; }
 .cs-sent-ticks li::before { content: ""; display: block; height: 2px; margin-bottom: 8px; background: var(--rule); transition: background .4s var(--ease); }
 .cs-sent-ticks li.is-on { color: var(--ink); }
 .cs-sent-ticks li.is-on::before { background: var(--accent); }
@@ -232,7 +233,7 @@
 .cs-sent-chart { display: flex; flex-direction: column; height: min(72vh, 640px); }
 .cs-sent-chart .cs-figure-frame { flex: 1; min-height: 0; }
 .cs-sent-chart canvas { width: 100%; height: 100%; }
-.cs-sent-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; list-style: none; margin: 0 0 10px; padding: 0; font-family: var(--mono); font-size: 11px; color: var(--ink-2); }
+.cs-sent-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; list-style: none; margin: 0 0 10px; padding: 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
 .cs-sent-legend li { display: inline-flex; align-items: center; gap: 6px; }
 .cs-sent-legend svg { width: 22px; height: 8px; }
 .cs-sent-scene.is-static { height: auto; }
@@ -246,12 +247,14 @@
   .cs-sent-stage { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; align-items: stretch; gap: 14px; }
   .cs-sent-chart { order: -1; height: auto; min-height: 0; }
   .cs-sent-chart.cs-figure { padding: 12px; }
-  .cs-sent-chart figcaption { display: none; }
+  .cs-sent-chart figcaption { margin-top: 8px; padding-top: 6px; }
+  .cs-sent-chart figcaption > :not(.note) { display: none; }
+  .cs-sent-chart figcaption .note { margin-left: 0; }
   .cs-sent-side { gap: 14px; min-height: 172px; }
   .cs-sent-step h3 { font-size: 21px; margin: 6px 0 6px; }
   .cs-sent-step p { font-size: 15px; }
   .cs-sent-scene.is-static .cs-sent-chart { height: 380px; }
-  .cs-sent-scene.is-static .cs-sent-chart figcaption { display: flex; }
+  .cs-sent-scene.is-static .cs-sent-chart figcaption > :not(.note) { display: inline; }
 }
 
 /* Regularisation explainer */
@@ -284,7 +287,7 @@
 @media (max-width: 900px) { .cs-sent-reg { grid-template-columns: 1fr; } }
 @media (max-width: 480px) {
   .cs-tabs { display: flex; width: 100%; }
-  .cs-tab { flex: 1; padding: 0 8px; font-size: 11px; }
+  .cs-tab { flex: 1; padding: 0 8px; font-size: 12px; }
   .cs-sent-bars li, .cs-sent-axis { grid-template-columns: 26px minmax(0, 1fr) 44px; gap: 8px; }
 }
 
@@ -293,3 +296,46 @@
 .cs-sent-close .sect-head:first-child { margin-top: 0; }
 .cs-sent-ask { margin-top: 24px; color: var(--ink-2); }
 .cs-sent-ask a { color: var(--ink); }
+
+/* =========================================================
+   4. SHARED ADDITIONS (work index + both case pages)
+   ========================================================= */
+/* Plain-English subtitle beside a report-style conceit */
+.sect-head .sect-sub { font-family: var(--sans); font-size: 15px; color: var(--ink-2); letter-spacing: 0; text-transform: none; }
+@media (max-width: 600px) {
+  .sect-head:has(.sect-sub) { flex-wrap: wrap; row-gap: 4px; }
+  .sect-head .sect-sub { order: 3; flex-basis: 100%; font-size: 14px; }
+}
+.cs-chapter-head .sect-sub, .cs-sub { font-family: var(--sans); font-size: 15px; color: var(--ink-2); margin: 0; }
+
+/* On-object cue: a small pill that sits on the thing it describes */
+.cue { display: inline-flex; align-items: center; gap: 8px; width: max-content; max-width: 100%; font-family: var(--sans); font-size: 13px; font-weight: 500;
+  color: var(--accent); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+.cue::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 var(--accent-soft);
+  animation: cue-pulse 2.4s var(--ease) infinite; }
+.cue.is-gone { opacity: 0; transform: translateY(-4px); pointer-events: none; }
+@keyframes cue-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
+
+/* Work index: cue on the first row (desktop) — the touch rows already say "Tap for summary" */
+.wi-row .cue { margin-top: 6px; }
+@media (hover: none), (max-width: 860px) { .wi-row .cue { display: none; } }
+
+/* Sentiment λ slider: on-object cue + one-time thumb nudge */
+.cs-sent-lam .cue { margin-top: 2px; }
+.cs-sent-sub { margin-top: 8px; font-size: 14px; max-width: 32ch; }
+@media (max-width: 800px) { .cs-sent-sub { margin-top: 4px; font-size: 13px; } }
+.cs-range.is-nudge::-webkit-slider-thumb { animation: thumb-nudge 1.6s var(--ease) 2; }
+.cs-range.is-nudge::-moz-range-thumb { animation: thumb-nudge 1.6s var(--ease) 2; }
+@keyframes thumb-nudge {
+  0%   { transform: translateX(0);    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent); }
+  25%  { transform: translateX(9px);  }
+  50%  { transform: translateX(-5px); box-shadow: 0 0 0 10px transparent; }
+  70%  { transform: translateX(0); }
+  100% { transform: translateX(0);    box-shadow: 0 0 0 0 transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue::before { animation: none; }
+  .cs-range.is-nudge::-webkit-slider-thumb { animation: none; }
+  .cs-range.is-nudge::-moz-range-thumb { animation: none; }
+}

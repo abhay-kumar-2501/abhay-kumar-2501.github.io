@@ -5,15 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Reading the News — Abhay Kumar</title>
 <meta name="description" content="Case 02.1: does news sentiment predict S&amp;P 500 returns? 24 years, 6,000+ trading days, LASSO, Ridge and Elastic Net against buy-and-hold. Out-of-sample, buy-and-hold won.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Reading the News — Abhay Kumar">
+<meta property="og:description" content="Case 02.1: does news sentiment predict S&amp;P 500 returns? 24 years, 6,000+ trading days, LASSO, Ridge and Elastic Net against buy-and-hold. Out-of-sample, buy-and-hold won.">
+<meta property="og:url" content="https://abhay-kumar-2501.github.io/work/sentiment.html">
+<meta property="og:image" content="https://abhay-kumar-2501.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f4f1e9">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-<script>(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
+<script>document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/base.css?v=3">
-<link rel="stylesheet" href="../assets/css/work.css?v=3">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..500,0..100,0..1;1,9..144,400,0..100,0..1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/base.css?v=5">
+<link rel="stylesheet" href="../assets/css/work.css?v=5">
 </head>
-<body data-page="case" data-root="../" data-next="agents">
+<body data-page="case" data-root="../" data-next="agents" class="cs-sentiment">
 <main id="main">
 
   <!-- ============ Hero ============ -->
@@ -60,6 +66,7 @@
           <div>
             <span class="cs-num">§ 02</span>
             <h2 class="label" id="ch2" style="margin:6px 0 0">The experiment, scrolled</h2>
+            <p class="cs-sub cs-sent-sub">Keep scrolling — the chart builds the study in four steps.</p>
           </div>
           <ol class="cs-sent-ticks" aria-hidden="true">
             <li class="is-on">Score</li><li>Fit</li><li>Split</li><li>Test</li>
@@ -97,7 +104,7 @@
           <div class="cs-figure-frame">
             <canvas id="sent-canvas" role="img" aria-label="Illustrative chart. A daily sentiment series runs along the bottom. In the in-sample region, LASSO, Ridge and Elastic Net equity curves rise above buy-and-hold. A train/test split line then appears; in the out-of-sample region the three model curves fall back below buy-and-hold."></canvas>
           </div>
-          <figcaption><span class="label">Fig. 1</span> Growth of a dollar, log scale, with daily sentiment beneath. <span class="note">Illustrative series — the shape of the finding, not the actual data.</span></figcaption>
+          <figcaption><span class="label">Fig. 1</span> <span class="cap">Growth of a dollar, log scale, with daily sentiment beneath.</span> <span class="note">Illustrative — not the study&rsquo;s data.</span></figcaption>
         </figure>
       </div>
     </div>
@@ -108,6 +115,7 @@
     <div class="cs-chapter-head">
       <span class="cs-num">§ 03</span>
       <h2 class="h2" id="ch3" data-split>Three ways to say less</h2>
+      <p class="cs-sub" data-reveal>How LASSO, Ridge and Elastic Net keep a model from over-fitting.</p>
     </div>
     <div class="cs-chapter-body">
       <p class="body" data-reveal>Penalised regression is the textbook defence against overfitting: charge the model for every coefficient it relies on, and it has to choose. The penalty strength, <strong>λ</strong>, sets the price. The three models differ in <em>how</em> they charge.</p>
@@ -125,6 +133,7 @@
           <div class="row"><label class="label" for="lam">Penalty strength (λ)</label><output id="lam-out" for="lam">0.35</output></div>
           <input class="cs-range" type="range" id="lam" min="0" max="100" value="35" aria-describedby="reg-explain">
           <div class="ends"><span class="note">Weak — fits everything</span><span class="note">Strong — fits little</span></div>
+          <span class="cue" id="lam-cue" aria-hidden="true">Drag the dot to raise the penalty</span>
         </div>
         <div class="cs-sent-explain" id="reg-explain" aria-live="polite">
           <h3 class="h3" data-x="title">LASSO · L1 penalty</h3>
@@ -138,7 +147,7 @@
       <figure class="cs-figure" id="reg-panel" role="tabpanel" aria-labelledby="tab-lasso">
         <ul class="cs-sent-bars" id="reg-bars" aria-label="Coefficient values"></ul>
         <div class="cs-sent-axis" aria-hidden="true"><span></span><div><span class="note">− negative</span><span class="note">0</span><span class="note">positive +</span></div><span></span></div>
-        <figcaption><span class="label">Fig. 2</span> Dashed outline: unpenalised fit. Solid: after the penalty. <span class="note">Illustrative coefficients — not the study's model.</span></figcaption>
+        <figcaption><span class="label">Fig. 2</span> Dashed outline: unpenalised fit. Solid: after the penalty. <span class="note">Illustrative coefficients.</span></figcaption>
       </figure>
     </div>
 
@@ -166,27 +175,27 @@
     </ol>
 
     <div class="sect-head" data-reveal>
-      <span class="num">§ 05</span><span class="title">Deliverables</span><span class="fill"></span><span class="aside">Research report + presentation</span>
+      <span class="num">§ 05</span><span class="title">Deliverables</span><span class="sect-sub">— the write-up and the deck</span><span class="fill"></span><span class="aside">Available on request</span>
     </div>
     <div class="cs-deliverables">
       <div class="cs-doc card" data-reveal>
-        <div class="top"><span class="label">Document</span><span class="label">01</span></div>
+        <div class="top"><span class="label">Document · 01</span><span class="label">Available on request</span></div>
         <h3 class="h3">Research report</h3>
         <p>Data, method, in- and out-of-sample results, and a plain section on the limits of the approach.</p>
-        <div class="lines" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="cs-doc-ask"><a class="btn" href="mailto:codeabhay3@gmail.com?subject=Request%3A%20research%20report%20%E2%80%94%20news%20sentiment%20%26%20S%26P%20500%20study" data-no-curtain>Email to request <span class="arr" aria-hidden="true">→</span></a></div>
       </div>
       <div class="cs-doc card" data-reveal style="--d:.08s">
-        <div class="top"><span class="label">Deck</span><span class="label">02</span></div>
+        <div class="top"><span class="label">Deck · 02</span><span class="label">Available on request</span></div>
         <h3 class="h3">Presentation</h3>
         <p>The same story, shorter: question, models, the split, and why the negative result is the result.</p>
-        <div class="lines" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="cs-doc-ask"><a class="btn" href="mailto:codeabhay3@gmail.com?subject=Request%3A%20presentation%20%E2%80%94%20news%20sentiment%20%26%20S%26P%20500%20study" data-no-curtain>Email to request <span class="arr" aria-hidden="true">→</span></a></div>
       </div>
     </div>
-    <p class="cs-sent-ask body" data-reveal>Happy to walk through either — <a class="link-u" href="mailto:codeabhay3@gmail.com" data-no-curtain>codeabhay3@gmail.com</a>.</p>
+    <p class="cs-sent-ask body" data-reveal>Not posted publicly. I&rsquo;m happy to send either and walk through it — <a class="link-u" href="mailto:codeabhay3@gmail.com" data-no-curtain>codeabhay3@gmail.com</a>.</p>
   </section>
 
 </main>
-<script src="../assets/js/site.js?v=3" defer></script>
-<script src="../assets/js/sentiment.js?v=3" defer></script>
+<script src="../assets/js/site.js?v=5" defer></script>
+<script src="../assets/js/sentiment.js?v=5" defer></script>
 </body>
 </html>

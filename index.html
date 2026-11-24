@@ -5,20 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Index — Abhay Kumar</title>
 <meta name="description" content="Abhay Kumar — finance and economics student at Penn State building models, and the discipline to doubt them. Research, record and contact.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Index — Abhay Kumar">
+<meta property="og:description" content="Abhay Kumar — finance and economics student at Penn State building models, and the discipline to doubt them. Research, record and contact.">
+<meta property="og:url" content="https://abhay-kumar-2501.github.io/">
+<meta property="og:image" content="https://abhay-kumar-2501.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f4f1e9">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<script>(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
+<script>document.documentElement.classList.add('js');(function(){try{var t=localStorage.getItem('ak-theme');if(t)document.documentElement.dataset.theme=t;if(sessionStorage.getItem('ak-t'))document.documentElement.classList.add('is-entering')}catch(e){}})()</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/base.css?v=3">
-<link rel="stylesheet" href="assets/css/home.css?v=3">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..500,0..100,0..1;1,9..144,400,0..100,0..1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css?v=5">
+<link rel="stylesheet" href="assets/css/home.css?v=5">
 </head>
 <body data-page="home" data-root="" >
 <main id="main">
 
   <!-- ============ 1. Hero ============ -->
   <section class="hero" aria-labelledby="hero-name">
-    <canvas class="hero-canvas" role="img" aria-label="Illustrative price line drawing itself across the page, ending in a live, gently moving quote."></canvas>
+    <canvas class="hero-canvas" role="img" aria-label="Illustrative line tracing Abhay's path from autumn 2024 to now, with six real milestones marked along it."></canvas>
     <div class="wrap hero-inner">
       <div class="hero-top">
         <p class="eyebrow" data-reveal style="--d:.1s">Annual Report <span class="sep">·</span> Vol. 2026</p>
@@ -28,6 +34,9 @@
       <div class="hero-main">
         <h1 class="display hero-name" id="hero-name" data-split style="--d:.25s">Abhay Kumar</h1>
         <p class="lede hero-lede" data-reveal style="--d:.7s">Finance and economics student building models — <em>and the discipline to doubt them.</em></p>
+        <p class="hero-contact" data-reveal style="--d:.8s">
+          <a class="link-u" data-ak="resume" href="assets/docs/Abhay_Kumar_Resume.pdf" target="_blank" rel="noopener">Résumé <span aria-hidden="true">↗</span></a><span class="sep" aria-hidden="true">·</span><a class="link-u" data-ak="email" href="mailto:codeabhay3@gmail.com" data-no-curtain>Email</a><span class="sep" aria-hidden="true">·</span><a class="link-u" data-ak="linkedin" href="https://www.linkedin.com/in/abhay-kumar-2501/" target="_blank" rel="noopener">LinkedIn</a>
+        </p>
       </div>
 
       <div class="hero-foot">
@@ -49,7 +58,18 @@
         </a>
       </div>
     </div>
-    <p class="note hero-note" data-reveal="fade" style="--d:2.4s">Illustrative series — not market data.</p>
+    <p class="note hero-note" data-reveal="fade" style="--d:2.4s">AK · trajectory (illustrative)</p>
+
+    <!-- Milestones pinned to the line. Markers + card are built by home.js from real résumé dates. -->
+    <div class="hero-marks" role="group" aria-label="Milestones along the line — use arrow keys to move between them"></div>
+    <div class="hero-card" id="hero-card" aria-hidden="true">
+      <span class="hc-date"></span>
+      <p class="hc-role"></p>
+      <p class="hc-org"></p>
+      <p class="hc-note" id="hero-card-note"></p>
+      <a class="hc-link" href="record.html" tabindex="-1"><span class="hc-link-t">Read</span> <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+    <span class="hero-cue" aria-hidden="true"><i></i><span class="hero-cue-t">Hover the line</span></span>
   </section>
 
   <!-- ============ 2. Ticker ============ -->
@@ -102,16 +122,16 @@
           <path class="th-model" clip-path="url(#th-c-m)"/>
           <path class="th-act" clip-path="url(#th-c-a)"/>
         </svg>
-        <span class="th-tag th-tag-split label">Sample split</span>
-        <span class="th-tag th-tag-model label">Model · in-sample promise</span>
-        <span class="th-tag th-tag-act label">Held-out · what happened</span>
+        <span class="th-tag th-tag-split">Sample split</span>
+        <span class="th-tag th-tag-model">Model · in-sample promise</span>
+        <span class="th-tag th-tag-act">Held-out · what happened</span>
         <i class="th-dot th-dot-ink"></i>
         <i class="th-dot th-dot-acc"></i>
       </div>
 
       <div class="wrap thesis-foot">
         <div class="thesis-ticks" aria-hidden="true"><i></i><i></i><i></i></div>
-        <span class="note">Illustrative series — the shape of a lesson, not actual results.</span>
+        <span class="note">Illustrative<sup>†</sup></span>
       </div>
     </div>
   </section>
@@ -126,44 +146,44 @@
       <div class="figs-grid">
         <article class="fig" data-reveal style="--d:0s">
           <hr class="fig-rule" data-reveal="rule">
-          <span class="fig-k label">A.1 · Academic</span>
+          <span class="fig-k">Academic</span>
           <p class="fig-n figure"><span data-count="3.99" data-decimals="2">3.99</span></p>
-          <h3 class="fig-l label">GPA, of 4.00</h3>
+          <h3 class="fig-l">GPA, of 4.00</h3>
           <p class="fig-c">B.S. Finance and B.S. Economics (STEM). Dean’s List, four semesters of four.</p>
         </article>
         <article class="fig" data-reveal style="--d:.08s">
           <hr class="fig-rule" data-reveal="rule">
-          <span class="fig-k label">A.2 · Research</span>
+          <span class="fig-k">Research</span>
           <p class="fig-n figure"><span data-count="6000" data-suffix="+">6,000+</span></p>
-          <h3 class="fig-l label">Trading days analysed</h3>
+          <h3 class="fig-l">Trading days analysed</h3>
           <p class="fig-c">24 years of S&amp;P 500 returns, tested against daily news sentiment.</p>
         </article>
         <article class="fig" data-reveal style="--d:.16s">
           <hr class="fig-rule" data-reveal="rule">
-          <span class="fig-k label">A.3 · Research</span>
+          <span class="fig-k">Research</span>
           <p class="fig-n figure"><span data-count="4">4</span><span class="fig-n-sub"> / <span data-count="20" data-suffix="+">20+</span></span></p>
-          <h3 class="fig-l label">AI agents / design trials</h3>
+          <h3 class="fig-l">AI agents / design trials</h3>
           <p class="fig-c">A human-participant pricing experiment, replayed by agents under information asymmetry.</p>
         </article>
         <article class="fig" data-reveal style="--d:.24s">
           <hr class="fig-rule" data-reveal="rule">
-          <span class="fig-k label">B.1 · Operations</span>
+          <span class="fig-k">Operations</span>
           <p class="fig-n figure"><span data-count="40" data-suffix="+">40+</span></p>
-          <h3 class="fig-l label">Staff directed per shift</h3>
+          <h3 class="fig-l">Staff directed per shift</h3>
           <p class="fig-c">Senior Student Manager in a ~250-staff campus dining facility.</p>
         </article>
         <article class="fig" data-reveal style="--d:.32s">
           <hr class="fig-rule" data-reveal="rule">
-          <span class="fig-k label">B.2 · Operations</span>
+          <span class="fig-k">Operations</span>
           <p class="fig-n figure"><span data-count="200" data-suffix="+">200+</span></p>
-          <h3 class="fig-l label">Weekly shifts, labor spend controlled</h3>
+          <h3 class="fig-l">Weekly shifts, labor spend controlled</h3>
           <p class="fig-c">Planned against demand forecasts and labor cost analysis.</p>
         </article>
         <article class="fig" data-reveal style="--d:.4s">
           <hr class="fig-rule" data-reveal="rule">
-          <span class="fig-k label">C.1 · Service</span>
+          <span class="fig-k">Service</span>
           <p class="fig-n figure"><span data-count="17.7" data-decimals="1" data-prefix="$" data-suffix="M">$17.7M</span></p>
-          <h3 class="fig-l label">Raised at THON 2025</h3>
+          <h3 class="fig-l">Raised at THON 2025</h3>
           <p class="fig-c">Administrative lead on a 28-member committee supporting 700+ dancers.</p>
         </article>
       </div>
@@ -218,11 +238,34 @@
           <span class="case-cta">Read the case <span class="arr">→</span></span>
         </a>
       </div>
-      <p class="note cases-note" data-reveal="fade">Charts are illustrative series — the shape of each result, not the actual data.</p>
+      <p class="note cases-note" data-reveal="fade"><sup>†</sup> Every chart on this page is illustrative — the shape of an idea, not actual data. The milestone dates on the cover line are real.</p>
     </div>
   </section>
 
-  <!-- ============ 6. Contents ============ -->
+  <!-- ============ 6. Off the clock (teaser) ============ -->
+  <section class="off" aria-labelledby="off-title">
+    <div class="wrap">
+      <a class="off-strip" href="about.html#off-the-clock" data-reveal data-observe>
+        <svg class="off-art" viewBox="0 0 320 120" aria-hidden="true">
+          <path class="off-ground" d="M8 104 H312"/>
+          <path class="off-path" d="M36 98 C 96 4, 222 4, 284 84" pathLength="1"/>
+          <circle class="off-pt" cx="36" cy="98" r="3"/>
+          <circle class="off-pt off-pt--end" cx="284" cy="84" r="3"/>
+          <g class="off-plane"><path d="M-8 0 H8 M0 -6 V6 M-5 0 L-7 -3 M-5 0 L-7 3"/></g>
+          <text class="off-lbl" x="36" y="119" text-anchor="middle">KUNV</text>
+          <text class="off-lbl" x="284" y="119" text-anchor="middle">?</text>
+        </svg>
+        <div class="off-txt">
+          <p class="eyebrow">Off the clock</p>
+          <h2 class="h3 off-h" id="off-title">Aviation, soccer, cooking — and The Weeknd on repeat.</h2>
+          <p class="off-line">The parts of me that aren’t a regression. Flight plan filed; destination pending.</p>
+          <span class="off-cta">Meet the person <span class="arr" aria-hidden="true">→</span></span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ 7. Contents ============ -->
   <section class="section contents" aria-labelledby="toc-title">
     <div class="wrap">
       <div class="sect-head" data-reveal="fade">
@@ -281,7 +324,7 @@
   </section>
 
 </main>
-<script src="assets/js/site.js?v=3" defer></script>
-<script src="assets/js/home.js?v=3" defer></script>
+<script src="assets/js/site.js?v=5" defer></script>
+<script src="assets/js/home.js?v=5" defer></script>
 </body>
 </html>

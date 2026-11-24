@@ -72,17 +72,39 @@
     fly.addEventListener("ak:tile-on", fly1);
   }
 
-  /* ---------- Touch: no hover, so tiles draw when they scroll in, and toggle on tap ---------- */
+  /* ---------- Touch: no hover, so tiles draw when they scroll in, and replay on tap ---------- */
   const tiles = [...document.querySelectorAll(".tile")];
   const noHover = matchMedia("(hover: none)").matches;
   const setOn = (tile, on) => {
     tile.classList.toggle("is-on", on);
-    if (on) tile.dispatchEvent(new CustomEvent("ak:tile-on"));
+    if (on) { tile.classList.add("was-on"); tile.dispatchEvent(new CustomEvent("ak:tile-on")); }
   };
+  // Replay: snap the drawing back to blank without a transition, then draw again.
+  const replay = (tile) => {
+    tile.classList.add("is-replay");
+    tile.classList.remove("is-on");
+    void tile.offsetWidth;
+    tile.classList.remove("is-replay");
+    requestAnimationFrame(() => setOn(tile, true));
+  };
+
+  // On-object cue inside each drawing; wording matches the input method.
+  tiles.forEach((tile) => {
+    const art = tile.querySelector(".tile-art");
+    if (!art) return;
+    const cue = document.createElement("span");
+    cue.className = "tile-cue";
+    cue.setAttribute("aria-hidden", "true");
+    cue.textContent = noHover ? "Tap to replay" : "Hover to draw";
+    art.append(cue);
+    tile.addEventListener("mouseenter", () => tile.classList.add("was-on"));
+    tile.addEventListener("focus", () => tile.classList.add("was-on"));
+  });
+
   if (noHover) {
     tiles.forEach((tile) => {
       tile.addEventListener("ak:in", () => setTimeout(() => setOn(tile, true), 350));
-      tile.addEventListener("click", () => setOn(tile, !tile.classList.contains("is-on")));
+      tile.addEventListener("click", () => replay(tile));
     });
   }
   tiles.forEach((tile) => tile.addEventListener("keydown", (e) => {

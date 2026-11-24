@@ -37,85 +37,253 @@
   const pathD = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(2) + " " + p[1].toFixed(2)).join(" ");
 
   /* =========================================================
-     1. Hero — the line draws itself, then quotes live.
+     1. Hero — the line draws itself; six real milestones are
+        pinned to it. The line's shape is illustrative; the dates
+        and roles on the markers are from the résumé.
      ========================================================= */
   const hero = document.querySelector(".hero");
   const cv = hero && hero.querySelector(".hero-canvas");
+
+  // Contact links under the lede come from the shared constants.
+  if (hero) {
+    const set = (k, v) => hero.querySelectorAll(`[data-ak="${k}"]`).forEach((a) => (a.href = v));
+    if (AK.RESUME) set("resume", AK.RESUME);
+    if (AK.EMAIL) set("email", "mailto:" + AK.EMAIL);
+    if (AK.LINKEDIN) set("linkedin", AK.LINKEDIN);
+  }
+
   if (cv && cv.getContext) {
     const ctx = cv.getContext("2d");
     const N = 220;
     const S = series(N, 18, { drift: 30, dip: 9, dipAt: 0.58 });
-    const r = rng(7);
-    const T0 = Date.UTC(2024, 8, 3), T1 = Date.UTC(2026, 10, 24);
-    const MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
-    const dateAt = (i) => {
-      const d = new Date(T0 + (T1 - T0) * (i / (N - 1)));
-      return String(d.getUTCDate()).padStart(2, "0") + " " + MON[d.getUTCMonth()] + " " + d.getUTCFullYear();
-    };
-    const idx = (v) => (92 + v * 50).toFixed(2);
+    const T0 = Date.UTC(2024, 7, 1), T1 = Date.UTC(2026, 10, 24);   // Aug 2024 → today; the tip is "now"
+    const R = AK.root || "";
+    const MARKS = [
+      { t: Date.UTC(2024, 9, 1), date: "Oct 2024", role: "Senior Student Manager", org: "Penn State Auxiliary & Business Services",
+        note: "Labor spend across 200+ weekly shifts; 40+ staff directed per shift.", href: "record.html#r-dining", dest: "the Record" },
+      { t: Date.UTC(2025, 1, 15), date: "2025", role: "THON 2025", org: "Administrative lead · 28-member committee",
+        note: "Supporting engagement for 700+ dancers. $17.7M raised.", href: "record.html#r-thon", dest: "the Record" },
+      { t: Date.UTC(2025, 8, 1), date: "Sep 2025", role: "Nittany Markets & VITA", org: "Member · Volunteer tax preparer",
+        note: "Market outlooks for 100+ members; tax returns for students and low-income residents.", href: "record.html#r-nmaa", dest: "the Record" },
+      { t: Date.UTC(2026, 0, 1), date: "Jan 2026", role: "News sentiment study", org: "Quantitative research project",
+        note: "24 years of S&P 500 returns. Out of sample, buy-and-hold won.", href: "work/sentiment.html", dest: "case 02.1" },
+      { t: Date.UTC(2026, 4, 1), date: "May 2026", role: "Undergraduate Research Assistant", org: "Smeal College of Business",
+        note: "Four AI agents replay a pricing experiment, refined across 20+ trials.", href: "work/agents.html", dest: "case 02.2" },
+      { t: Date.UTC(2026, 5, 1), date: "Jun 2026", role: "LEAP Mentor", org: "Learning Edge Academic Program",
+        note: "Weekly study groups for ~70 first-year students.", href: "record.html#r-leap", dest: "the Record" },
+    ];
 
     let W = 0, H = 0, dpr = 1, col = {};
     let drawT = reduce ? 1 : 0, t0 = 0, started = reduce;
-    let tipOff = 0, tipTarget = 0, tipDir = 1, nextQuote = 0;
-    let pointer = { on: false, x: 0, y: 0 };
     let visible = true, raf = 0;
+    let active = -1, pinned = false, engaged = false, hideTimer = 0;
+    const fine = matchMedia("(hover: hover) and (pointer: fine)");
 
     const readCols = () => {
-      col = { ink: AK.css("--ink"), ink2: AK.css("--ink-2"), ink3: AK.css("--ink-3"), rule: AK.css("--rule"),
-        accent: AK.css("--accent"), paper: AK.css("--paper"), up: AK.css("--up"), down: AK.css("--down") };
+      col = { ink: AK.css("--ink"), ink3: AK.css("--ink-3"), rule: AK.css("--rule"), accent: AK.css("--accent"), paper: AK.css("--paper") };
     };
-    // On phones the text stacks, so the line lives in the gap between the lede and the figures.
-    const lede = hero.querySelector(".hero-lede"), foot = hero.querySelector(".hero-foot");
+    // On phones the text stacks, so the line lives in the gap between the contact row and the figures.
+    const above = hero.querySelector(".hero-contact") || hero.querySelector(".hero-lede"), foot = hero.querySelector(".hero-foot");
+    const figs = hero.querySelector(".hero-figs");
     let band = null;
     const measure = () => {
       band = null;
-      if (W >= 700 || !lede || !foot) return;
-      const top = lede.offsetTop + lede.offsetHeight + 56, bot = foot.offsetTop - 28;
+      if (W >= 700 || !above || !foot) return;
+      const top = above.offsetTop + above.offsetHeight + 64, bot = foot.offsetTop - 24;
       if (bot - top > 90) band = { top, bot };
     };
     const box = () => {
       const sm = W < 700;
-      if (band) return { x0: 0, x1: W * 0.78, top: band.top, bot: band.bot };
+      if (band) return { x0: 0, x1: W * 0.8, top: band.top, bot: band.bot };
       return { x0: 0, x1: W * (sm ? 0.8 : 0.86), top: H * (sm ? 0.44 : 0.4), bot: H * (sm ? 0.74 : 0.88) };
     };
+    const px = (b, i) => b.x0 + (b.x1 - b.x0) * (i / (N - 1));
+    const py = (b, v) => b.bot - (b.bot - b.top) * v;
+
+    /* ----- Markers: DOM links over the canvas (focusable, tappable, 40px targets) ----- */
+    const layer = hero.querySelector(".hero-marks");
+    const card = hero.querySelector(".hero-card");
+    const cue = hero.querySelector(".hero-cue");
+    const cDate = card.querySelector(".hc-date"), cRole = card.querySelector(".hc-role"), cOrg = card.querySelector(".hc-org"),
+      cNote = card.querySelector(".hc-note"), cLink = card.querySelector(".hc-link"), cLinkT = card.querySelector(".hc-link-t");
+    const els = MARKS.map((m, k) => {
+      const a = document.createElement("a");
+      a.className = "hm";
+      a.href = R + m.href;
+      a.tabIndex = k === 0 ? 0 : -1;
+      a.setAttribute("aria-describedby", "hero-card-note");
+      a.innerHTML = `<span class="sr-only">${m.date} — ${m.role}, ${m.org}</span>`;
+      layer.appendChild(a);
+      return a;
+    });
+    // x positions: in date order, proportional to time, then relaxed so neighbours never crowd (May/Jun 2026 sit a month apart).
+    let mpos = [];
+    const layout = () => {
+      const b = box(), L = b.x1 - b.x0;
+      const gap = clamp(L * 0.075, 46, 110), lo = Math.max(24, L * 0.05), hi = L * 0.93;
+      const xs = MARKS.map((m) => b.x0 + L * ((m.t - T0) / (T1 - T0)));
+      // Keep markers clear of the GPA / degree figures where the line runs behind them.
+      const hr = hero.getBoundingClientRect(), fr = figs ? figs.getBoundingClientRect() : null;
+      const blocked = (x) => {
+        if (!fr || !fr.width) return false;
+        const i = clamp(Math.round(((x - b.x0) / L) * (N - 1)), 0, N - 1), y = py(b, S[i]);
+        return x > fr.left - hr.left - 24 && x < fr.right - hr.left + 24 && y > fr.top - hr.top - 24 && y < fr.bottom - hr.top + 24;
+      };
+      for (let k = 0; k < xs.length; k++) {
+        xs[k] = Math.max(xs[k], k ? xs[k - 1] + gap : lo);
+        while (blocked(xs[k]) && xs[k] < hi) xs[k] += 4;
+      }
+      for (let k = xs.length - 1; k >= 0; k--) xs[k] = Math.min(xs[k], k < xs.length - 1 ? xs[k + 1] - gap : hi);
+      mpos = xs.map((x) => {
+        const i = clamp(Math.round(((x - b.x0) / L) * (N - 1)), 0, N - 1);
+        return { i, x: px(b, i), y: py(b, S[i]) };
+      });
+      mpos.forEach((p, k) => { els[k].style.left = p.x.toFixed(1) + "px"; els[k].style.top = p.y.toFixed(1) + "px"; });
+      // Cue sits just above the tip of the line ("now").
+      const tip = { x: px(b, N - 1), y: py(b, S[N - 1]) };
+      const cw = cue.offsetWidth || 140;
+      const qx = clamp(tip.x - cw + 10, 16, W - cw - 16), qy = tip.y - 40;
+      cue.style.setProperty("--qx", qx.toFixed(0) + "px");
+      cue.style.setProperty("--qy", qy.toFixed(0) + "px");
+      if (active > -1) placeCard(active, false);
+    };
+
+    const placeCard = (k, glide) => {
+      const p = mpos[k];
+      if (!p) return;
+      const cw = card.offsetWidth, ch = card.offsetHeight, pad = 16, top = 72;
+      let x, y;
+      if (W < 700) {
+        x = clamp(p.x - cw / 2, pad, W - cw - pad);
+        y = p.y - ch - 26 >= top ? p.y - ch - 26 : p.y + 26;
+      } else {
+        x = p.x + 22; if (x + cw > W - pad) x = p.x - 22 - cw;
+        x = clamp(x, pad, W - cw - pad);
+        y = p.y - ch - 22; if (y < top) y = p.y + 22;
+      }
+      y = clamp(y, top, H - ch - 8);
+      card.classList.toggle("no-glide", !glide);
+      card.style.setProperty("--cx", x.toFixed(0) + "px");
+      card.style.setProperty("--cy", y.toFixed(0) + "px");
+    };
+
+    const setActive = (k, how) => {
+      clearTimeout(hideTimer);
+      if (k === active) { if (how === "key") els[k].focus(); return; }
+      const wasOpen = active > -1;
+      if (active > -1) els[active].classList.remove("is-active");
+      active = k;
+      const m = MARKS[k];
+      els[k].classList.add("is-active");
+      cDate.textContent = m.date; cRole.textContent = m.role; cOrg.textContent = m.org; cNote.textContent = m.note;
+      cLink.href = R + m.href;
+      cLinkT.textContent = "Read";
+      cLink.setAttribute("aria-label", `Read more on ${m.dest}`);
+      card.classList.remove("swap"); void card.offsetWidth; card.classList.add("swap");
+      placeCard(k, wasOpen);
+      card.classList.add("is-open");
+      card.setAttribute("aria-hidden", "false");
+      els.forEach((e, j) => (e.tabIndex = j === k ? 0 : -1));
+      if (how === "key") els[k].focus();
+      if (!engaged) { engaged = true; cue.classList.add("is-done"); }
+      kick();
+    };
+    const clear = () => {
+      clearTimeout(hideTimer);
+      if (active > -1) els[active].classList.remove("is-active");
+      active = -1; pinned = false;
+      card.classList.remove("is-open");
+      card.setAttribute("aria-hidden", "true");
+      kick();
+    };
+    const hideSoon = () => { clearTimeout(hideTimer); hideTimer = setTimeout(() => { if (!pinned) clear(); }, 260); };
+
+    // Pointer (mouse/pen): snap to the nearest drawn marker while the pointer is over the line's band.
+    const nearZone = (x, y) => {
+      const b = box();
+      return y >= b.top - 90 && y <= b.bot + 70 && x <= b.x1 + 60;
+    };
+    hero.addEventListener("pointermove", (e) => {
+      if (e.pointerType === "touch") return;
+      if (card.contains(e.target)) { clearTimeout(hideTimer); return; }
+      if (e.target.closest("a:not(.hm)")) return;
+      const rc = hero.getBoundingClientRect();
+      const x = e.clientX - rc.left, y = e.clientY - rc.top;
+      const near = nearZone(x, y);
+      hero.classList.toggle("is-near", near);
+      if (!near) { if (!pinned) hideSoon(); return; }
+      let best = -1, bd = Infinity;
+      mpos.forEach((p, k) => { if (!els[k].classList.contains("on")) return; const d = Math.abs(p.x - x); if (d < bd) { bd = d; best = k; } });
+      if (best > -1) { pinned = false; setActive(best, "hover"); }
+    });
+    hero.addEventListener("pointerleave", () => { hero.classList.remove("is-near"); if (!pinned) hideSoon(); });
+
+    // Touch: tap a marker to open its card (tap again, or anywhere else, to close). Mouse click follows the link.
+    let lastType = "mouse";
+    els.forEach((a, k) => {
+      a.addEventListener("pointerdown", (e) => { lastType = e.pointerType; });
+      a.addEventListener("click", (e) => {
+        if (lastType !== "touch") return;               // mouse/keyboard: it's a link — go read
+        e.preventDefault();
+        if (active === k && pinned) clear(); else { setActive(k, "tap"); pinned = true; }
+        lastType = "mouse";
+      });
+      a.addEventListener("focus", () => { if (a.matches(":focus-visible")) { forceDrawn(); setActive(k, "focus"); pinned = true; } });
+      a.addEventListener("keydown", (e) => {
+        const n = els.length;
+        let to = -1;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") to = (k + 1) % n;
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") to = (k - 1 + n) % n;
+        else if (e.key === "Home") to = 0;
+        else if (e.key === "End") to = n - 1;
+        else if (e.key === "Escape") { clear(); return; }
+        if (to < 0) return;
+        e.preventDefault();
+        pinned = true;
+        setActive(to, "key");
+      });
+    });
+    hero.addEventListener("focusout", (e) => {
+      if (e.relatedTarget && (layer.contains(e.relatedTarget) || card.contains(e.relatedTarget))) return;
+      if (pinned && lastType !== "touch") { pinned = false; hideSoon(); }
+    });
+    document.addEventListener("pointerdown", (e) => {
+      if (active < 0) return;
+      if (layer.contains(e.target) || card.contains(e.target)) return;
+      if (e.pointerType === "touch" || pinned) clear();
+    });
+
+    const forceDrawn = () => { if (drawT < 1) { drawT = 1; started = true; } els.forEach((a) => a.classList.add("on")); };
+
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       W = hero.clientWidth; H = hero.clientHeight;
       measure();
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      layout();
     };
-    const val = (i, last) => S[i] + (i === last && drawT >= 1 ? tipOff : 0);
 
     const render = (now) => {
       ctx.clearRect(0, 0, W, H);
       const b = box();
-      const px = (i) => b.x0 + (b.x1 - b.x0) * (i / (N - 1));
-      const py = (v) => b.bot - (b.bot - b.top) * v;
       const reach = easeIO(drawT) * (N - 1);
       const last = Math.floor(reach);
       const frac = reach - last;
-      const mono = (sz, w = 400) => `${w} ${sz}px "IBM Plex Mono", ui-monospace, Menlo, monospace`;
 
-      // Gridlines + index labels (fade in with the draw).
+      // Gridlines only — no axis numbers: the line is a trajectory, not a quote.
       ctx.save();
       ctx.globalAlpha = clamp(drawT * 3);
       ctx.strokeStyle = col.rule; ctx.lineWidth = 1; ctx.setLineDash([2, 5]);
-      ctx.font = mono(10); ctx.fillStyle = col.ink3; ctx.textAlign = "right";
       for (let g = 0; g <= 3; g++) {
-        const v = g / 3, y = Math.round(py(v)) + 0.5;
+        const y = Math.round(py(b, g / 3)) + 0.5;
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
-        ctx.fillText(idx(v).replace(/\.\d+$/, ""), W - 16, y - 6);
       }
       ctx.restore();
 
-      // Build visible polyline.
       const pts = [];
-      for (let i = 0; i <= last; i++) pts.push([px(i), py(val(i, N - 1))]);
-      if (last < N - 1 && frac > 0) {
-        const v = lerp(S[last], S[last + 1], frac);
-        pts.push([px(last + frac), py(v)]);
-      }
+      for (let i = 0; i <= last; i++) pts.push([px(b, i), py(b, S[i])]);
+      if (last < N - 1 && frac > 0) pts.push([px(b, last + frac), py(b, lerp(S[last], S[last + 1], frac))]);
       if (pts.length < 2) return;
       const tip = pts[pts.length - 1];
 
@@ -130,81 +298,55 @@
       ctx.fillStyle = grad; ctx.fill();
       ctx.restore();
 
+      // Active milestone: a quiet drop-line to the baseline.
+      if (active > -1 && mpos[active]) {
+        const p = mpos[active], x = Math.round(p.x) + 0.5;
+        ctx.save();
+        ctx.strokeStyle = col.accent; ctx.globalAlpha = 0.55; ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
+        ctx.beginPath(); ctx.moveTo(x, p.y + 8); ctx.lineTo(x, Math.min(H, b.bot + 40)); ctx.stroke();
+        ctx.restore();
+      }
+
       // The line.
       ctx.beginPath();
       pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
       ctx.strokeStyle = col.ink; ctx.lineWidth = 1.5; ctx.lineJoin = "round"; ctx.lineCap = "round";
       ctx.stroke();
 
-      // Tip: a live quote.
-      const pulse = reduce ? 0.35 : ((now || 0) % 1800) / 1800;
-      ctx.beginPath(); ctx.arc(tip[0], tip[1], 4 + pulse * 14, 0, Math.PI * 2);
-      ctx.fillStyle = col.accent; ctx.globalAlpha = (1 - pulse) * 0.28; ctx.fill();
-      ctx.globalAlpha = 1;
+      // Tip: a pulsing dot — "now".
+      const pulse = reduce ? 0.35 : ((now || 0) % 2000) / 2000;
+      if (!reduce) {
+        ctx.beginPath(); ctx.arc(tip[0], tip[1], 4 + pulse * 14, 0, Math.PI * 2);
+        ctx.fillStyle = col.accent; ctx.globalAlpha = (1 - pulse) * 0.28; ctx.fill();
+        ctx.globalAlpha = 1;
+      }
       ctx.beginPath(); ctx.arc(tip[0], tip[1], 3.5, 0, Math.PI * 2);
       ctx.fillStyle = col.accent; ctx.fill();
-      if (drawT >= 1) {
-        const v = val(N - 1, N - 1);
-        ctx.font = mono(11, 500); ctx.textAlign = "left";
-        const txt = "LAST " + idx(v);
-        const arrow = tipDir >= 0 ? " ▲" : " ▼";
-        const tw = ctx.measureText(txt).width;
-        let lx = tip[0] + 14;
-        if (lx + tw + 24 > W - 8) lx = tip[0] - 14 - tw - 18;
-        ctx.fillStyle = col.ink; ctx.fillText(txt, lx, tip[1] + 4);
-        ctx.fillStyle = tipDir >= 0 ? col.up : col.down; ctx.fillText(arrow, lx + tw, tip[1] + 4);
-        ctx.font = mono(9); ctx.fillStyle = col.ink3; ctx.fillText("LIVE · ILLUSTRATIVE", lx, tip[1] - 10);
-      }
 
-      // Crosshair readout.
-      if (pointer.on && drawT > 0.05) {
-        const i = clamp(Math.round(((pointer.x - b.x0) / (b.x1 - b.x0)) * (N - 1)), 0, Math.max(0, last));
-        const x = px(i), v = val(i, N - 1), y = py(v);
-        ctx.save();
-        ctx.strokeStyle = col.ink3; ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
-        ctx.beginPath(); ctx.moveTo(Math.round(x) + 0.5, 0); ctx.lineTo(Math.round(x) + 0.5, H); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, Math.round(y) + 0.5); ctx.lineTo(W, Math.round(y) + 0.5); ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = col.paper; ctx.fill(); ctx.strokeStyle = col.ink; ctx.lineWidth = 1.5; ctx.stroke();
-        const prev = val(Math.max(0, i - 1), N - 1);
-        const l1 = dateAt(i), l2 = "IDX " + idx(v), up = v >= prev;
-        ctx.font = mono(11, 500);
-        const bw = Math.max(ctx.measureText(l1).width, ctx.measureText(l2 + " ▲").width) + 20, bh = 44;
-        let bx = x + 14, by = y - bh - 14;
-        if (bx + bw > W - 8) bx = x - 14 - bw;
-        if (by < 72) by = y + 14;
-        ctx.fillStyle = col.paper; ctx.strokeStyle = col.rule; ctx.lineWidth = 1;
-        ctx.fillRect(bx, by, bw, bh); ctx.strokeRect(bx + 0.5, by + 0.5, bw - 1, bh - 1);
-        ctx.textAlign = "left";
-        ctx.font = mono(10); ctx.fillStyle = col.ink3; ctx.fillText(l1, bx + 10, by + 17);
-        ctx.font = mono(11, 500); ctx.fillStyle = col.ink; ctx.fillText(l2, bx + 10, by + 34);
-        ctx.fillStyle = up ? col.up : col.down;
-        ctx.fillText(up ? " ▲" : " ▼", bx + 10 + ctx.measureText(l2).width, by + 34);
-        ctx.restore();
-      }
+      // Markers appear as the line reaches them.
+      mpos.forEach((p, k) => { if (p.i <= reach) els[k].classList.add("on"); });
+      if (drawT >= 1 && !cue.classList.contains("is-on")) setTimeout(() => cue.classList.add("is-on"), reduce ? 0 : 500);
     };
 
     const loop = (now) => {
       raf = 0;
       if (started && drawT < 1) drawT = clamp((now - t0) / 2200);
-      if (drawT >= 1 && now > nextQuote) {
-        const nt = (r() - 0.5) * 0.05;
-        tipDir = nt >= tipTarget ? 1 : -1;
-        tipTarget = nt;
-        nextQuote = now + 700 + r() * 900;
-      }
-      tipOff += (tipTarget - tipOff) * 0.06;
       render(now);
-      if (visible) raf = requestAnimationFrame(loop);
+      if (visible && !reduce) raf = requestAnimationFrame(loop);
     };
     const kick = () => { if (reduce) render(0); else if (!raf && visible) raf = requestAnimationFrame(loop); };
 
+    const setCue = () => {
+      cue.querySelector(".hero-cue-t").textContent = fine.matches ? "Hover the line" : "Tap the markers";
+    };
+    setCue();
+    if (fine.addEventListener) fine.addEventListener("change", () => { setCue(); layout(); });
+
     readCols(); resize();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); kick(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { resize(); kick(); });
     if (reduce) {
+      forceDrawn();
       render(0);
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(0));
     } else {
       // Wait for the page curtain (if arriving from another page) before drawing.
       const delay = doc.classList.contains("is-entering") ? 900 : 250;
@@ -213,18 +355,11 @@
     }
 
     new IntersectionObserver((es) => { visible = es[0].isIntersecting; kick(); }).observe(hero);
-    addEventListener("resize", () => { resize(); kick(); if (reduce) render(0); });
+    addEventListener("resize", () => { resize(); kick(); });
     addEventListener("ak:theme", () => { requestAnimationFrame(() => { readCols(); render(performance.now()); }); });
-    hero.addEventListener("pointermove", (e) => {
-      if (e.pointerType === "touch") return;
-      const rc = hero.getBoundingClientRect();
-      pointer = { on: true, x: e.clientX - rc.left, y: e.clientY - rc.top };
-      kick();
-    });
-    hero.addEventListener("pointerleave", () => { pointer.on = false; kick(); });
 
-    const cue = hero.querySelector(".scroll-cue");
-    if (cue) cue.addEventListener("click", (e) => {
+    const scue = hero.querySelector(".scroll-cue");
+    if (scue) scue.addEventListener("click", (e) => {
       const t = document.getElementById("thesis");
       if (!t) return;
       e.preventDefault();
@@ -279,7 +414,7 @@
     pos(tAct, act[M - 1]);
 
     const update = (p) => {
-      const h = lerp(0.16, 1, smooth(0, 0.3, p));
+      const h = lerp(0.62, 1, smooth(0, 0.3, p));   // opens ~35% drawn (of the full width) so the first screen is never empty
       const m = smooth(0.36, 0.62, p);
       const a = smooth(0.68, 0.92, p);
       cH.setAttribute("width", (SPLIT * h + 2).toFixed(1));
@@ -380,7 +515,7 @@
       mk(svg, pathD(st), "m-acc");
       dot(wrap, bh[n - 1]); dot(wrap, st[n - 1], "acc");
       const lab = document.createElement("span");
-      lab.className = "m-oos"; lab.style.left = (sx(cut) / 300) * 100 + "%"; lab.textContent = "OUT-OF-SAMPLE →";
+      lab.className = "m-oos"; lab.style.left = (sx(cut) / 300) * 100 + "%"; lab.textContent = "Out of sample →";
       wrap.appendChild(lab);
     } else if (kind === "agents") {
       const rounds = 20, sx = (j) => 6 + (288 * j) / (rounds - 1);
@@ -423,5 +558,67 @@
       const rc = wrap.getBoundingClientRect();
       wrap.style.setProperty("--x", clamp((e.clientX - rc.left) / rc.width) * 100 + "%");
     });
+  });
+
+  /* =========================================================
+     6. Off the clock — a flight path draws, the plane flies it.
+     ========================================================= */
+  const off = document.querySelector(".off-strip");
+  if (off) {
+    const path = off.querySelector(".off-path"), plane = off.querySelector(".off-plane");
+    const L = path.getTotalLength ? path.getTotalLength() : 0;
+    const put = (k) => {
+      if (!L) return;
+      const a = path.getPointAtLength(L * k), b = path.getPointAtLength(Math.min(L, L * k + 1));
+      const ang = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+      plane.setAttribute("transform", `translate(${a.x.toFixed(1)} ${a.y.toFixed(1)}) rotate(${ang.toFixed(1)})`);
+      path.style.strokeDashoffset = (1 - k).toFixed(4);
+      plane.style.opacity = k > 0.01 && k < 0.995 ? 1 : 0;
+    };
+    let anim = 0;
+    const fly = () => {
+      if (reduce || !L) { put(1); return; }
+      cancelAnimationFrame(anim);
+      const t0 = performance.now();
+      const step = (t) => {
+        const k = clamp((t - t0) / 2000);
+        put(easeIO(k));
+        if (k < 1) anim = requestAnimationFrame(step);
+      };
+      anim = requestAnimationFrame(step);
+    };
+    put(reduce ? 1 : 0);
+    off.addEventListener("ak:in", fly);
+    off.addEventListener("pointerenter", fly);
+  }
+
+  /* =========================================================
+     7. Contents — a small sparkline per chapter, drawn on hover.
+     ========================================================= */
+  const SPARKS = {
+    "index.html": () => series(40, 18, { drift: 30, dip: 9, dipAt: 0.58 }),                          // the cover line
+    "work/index.html": () => Array.from({ length: 40 }, (_, i) => { const k = i / 39;                 // promise, then held-out reality
+      return k < 0.6 ? 0.15 + k * 1.2 : 0.87 - (k - 0.6) * 1.3 + Math.sin(i * 1.7) * 0.03; }),
+    "record.html": () => Array.from({ length: 40 }, (_, i) => 0.08 + Math.floor(i / 7) * 0.17),        // steps up, entry by entry
+    "about.html": () => Array.from({ length: 40 }, (_, i) => { const k = i / 39; return 0.15 + Math.sin(k * Math.PI) * 0.75; }), // a flight arc
+  };
+  document.querySelectorAll(".toc > li > .toc-row").forEach((row) => {
+    const href = row.getAttribute("href") === "#main" ? "index.html" : row.getAttribute("href");
+    const mkS = SPARKS[href];
+    const fill = row.querySelector(".toc-fill");
+    if (!mkS || !fill) return;
+    const v = mkS(), w = 132, h = 34;
+    const pts = v.map((y, i) => [2 + ((w - 4) * i) / (v.length - 1), h - 3 - clamp(y) * (h - 8)]);
+    const svg = document.createElementNS(SVGNS, "svg");
+    svg.setAttribute("class", "toc-spark");
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.setAttribute("aria-hidden", "true");
+    const p = document.createElementNS(SVGNS, "path");
+    p.setAttribute("d", pathD(pts)); p.setAttribute("pathLength", "1");
+    const c = document.createElementNS(SVGNS, "circle");
+    const e = pts[pts.length - 1];
+    c.setAttribute("cx", e[0]); c.setAttribute("cy", e[1]); c.setAttribute("r", "2.5");
+    svg.append(p, c);
+    fill.appendChild(svg);
   });
 })();

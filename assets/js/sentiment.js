@@ -110,7 +110,7 @@
       paper2: AK.css("--paper-2"), mono: AK.css("--mono") || "monospace",
     };
     const small = w < 520;
-    const fs = small ? 9 : 10.5;
+    const fs = small ? 11 : 12;   // canvas text floor: 11px
 
     // Stage progress
     const k1 = ease(seg(P, 0.03, 0.22));
@@ -121,7 +121,7 @@
     const drawEnd = k4 > 0 ? SPLIT + k4 * (N - 1 - SPLIT) : k1 * SPLIT;
 
     // Layout
-    const pad = { l: 4, r: small ? 66 : 92, t: 34, b: 6 };
+    const pad = { l: 4, r: small ? 70 : 104, t: 36, b: 6 };
     const plotW = w - pad.l - pad.r;
     const plotH = h - pad.t - pad.b;
     const eqTop = pad.t, eqBot = pad.t + plotH * 0.74;
@@ -154,13 +154,13 @@
     // Region labels
     ctx.fillStyle = C.ink3;
     ctx.textAlign = "left";
-    ctx.fillText("IN-SAMPLE", pad.l + 2, 13);
+    ctx.fillText("IN-SAMPLE", pad.l + 2, 14);
     ctx.fillText("SENTIMENT", pad.l + 2, sTop - 6);
     if (k3 > 0 && !small) {
       ctx.globalAlpha = k3;
       ctx.fillStyle = C.accent;
       ctx.textAlign = "right";
-      ctx.fillText("OUT-OF-SAMPLE", right - 2, 13);
+      ctx.fillText("OUT-OF-SAMPLE", right - 2, 14);
       ctx.globalAlpha = 1;
     }
 
@@ -217,9 +217,9 @@
       ctx.globalAlpha = k3;
       ctx.fillStyle = C.ink;
       ctx.font = `500 ${fs}px ${C.mono}`;
-      ctx.textAlign = "right"; ctx.fillText("train", splitX - 6, 13);
-      ctx.textAlign = "center"; ctx.fillText("|", splitX + .5, 13);
-      ctx.textAlign = "left"; ctx.fillText("test", splitX + 6, 13);
+      ctx.textAlign = "right"; ctx.fillText("train", splitX - 6, 14);
+      ctx.textAlign = "center"; ctx.fillText("|", splitX + .5, 14);
+      ctx.textAlign = "left"; ctx.fillText("test", splitX + 6, 14);
       ctx.font = `${fs}px ${C.mono}`;
       ctx.globalAlpha = 1;
     }
@@ -352,14 +352,30 @@
   });
   range.addEventListener("input", () => render(+range.value));
 
-  // Intro: on first view, sweep λ from 0 up to its resting value.
+  // On-object cue under the slider: goes away the first time someone uses it.
+  const cue = document.getElementById("lam-cue");
+  let touched = false;
+  const firstUse = () => {
+    if (touched) return;
+    touched = true;
+    range.classList.remove("is-nudge");
+    if (cue) { cue.classList.add("is-gone"); setTimeout(() => cue.remove(), 600); }
+  };
+  ["pointerdown", "keydown", "input"].forEach((ev) => range.addEventListener(ev, (e) => { if (e.isTrusted) firstUse(); }));
+
+  // One gentle nudge on the thumb, once, so it reads as draggable.
+  const nudge = () => {
+    if (reduce || touched) return;
+    range.classList.add("is-nudge");
+    setTimeout(() => range.classList.remove("is-nudge"), 3400);
+  };
+
+  // Intro: on first view, sweep λ from 0 up to its resting value, then nudge.
   const rest = +range.value;
   const reg = document.querySelector(".cs-sent-reg");
   if (reduce || !reg) render(rest);
   else {
     range.value = 0; render(0);
-    let touched = false;
-    range.addEventListener("pointerdown", () => (touched = true), { once: true });
     reg.addEventListener("ak:in", () => {
       const t0 = performance.now() + 350, dur = 1400;
       const stepFn = (t) => {
@@ -368,6 +384,7 @@
         const v = Math.round(rest * (1 - Math.pow(1 - k, 3)));
         range.value = v; render(v);
         if (k < 1) requestAnimationFrame(stepFn);
+        else setTimeout(nudge, 250);
       };
       requestAnimationFrame(stepFn);
     }, { once: true });

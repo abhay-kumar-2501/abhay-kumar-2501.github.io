@@ -26,7 +26,7 @@
   };
   readColors();
 
-  const MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace';
+  const MONO = '"JetBrains Mono", ui-monospace, Menlo, monospace';
 
   const fitCanvas = (cv) => {
     const r = cv.getBoundingClientRect();
@@ -177,16 +177,16 @@
         if (a.informed) { ctx.fillStyle = C.accent; ctx.fill(); }
         else { ctx.fillStyle = C.paper; ctx.fill(); ctx.strokeStyle = C.ink; ctx.lineWidth = 1.25; ctx.stroke(); }
         ctx.fillStyle = a.informed ? C.paper : C.ink;
-        ctx.font = `500 ${Math.round(clamp(G.nr * 0.55, 10, 13))}px ${MONO}`;
+        ctx.font = `500 ${Math.round(clamp(G.nr * 0.55, 11, 13))}px ${MONO}`;
         ctx.fillText(a.id, P.x, P.y + 0.5);
         // labels: role + latest offer
         const top = i < 2;
         const off = G.reach + 10;
         const ly = top ? P.y - off : P.y + off;
-        ctx.font = `400 ${G.m < 300 ? 9 : 10}px ${MONO}`; ctx.fillStyle = C.ink3;
+        ctx.font = `400 11px ${MONO}`; ctx.fillStyle = C.ink3;
         ctx.fillText(a.informed ? "INFORMED" : "UNINFORMED", P.x, ly);
         const offer = anim && local < 1 ? prev.offers[i] : cur.offers[i];
-        ctx.font = `400 ${G.m < 300 ? 10 : 11}px ${MONO}`; ctx.fillStyle = C.ink2;
+        ctx.font = `400 ${G.m < 300 ? 11 : 12}px ${MONO}`; ctx.fillStyle = C.ink2;
         ctx.fillText(offer.toFixed(2), P.x, ly + (top ? -14 : 14));
       });
 
@@ -200,11 +200,11 @@
       }
       ctx.fillStyle = C.paper; ctx.strokeStyle = C.ink; ctx.lineWidth = 1.25;
       ctx.beginPath(); ctx.rect(G.cx - box * 0.75, G.cy - box * 0.5, box * 1.5, box); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = C.ink3; ctx.font = `400 ${G.m < 300 ? 8 : 9}px ${MONO}`;
-      ctx.fillText("MARKET", G.cx, G.cy - box * 0.22);
+      ctx.fillStyle = C.ink3; ctx.font = `400 11px ${MONO}`;
+      ctx.fillText("MARKET", G.cx, G.cy - box * 0.25);
       ctx.fillStyle = C.accent; ctx.font = `500 ${Math.round(clamp(box * 0.3, 11, 15))}px ${MONO}`;
-      ctx.fillText(lerp(prev.p, cur.p, anim ? easeOut(settleK) : 1).toFixed(2), G.cx, G.cy + box * 0.14);
-      ctx.fillStyle = C.ink3; ctx.font = `400 ${G.m < 300 ? 8 : 9}px ${MONO}`;
+      ctx.fillText(lerp(prev.p, cur.p, anim ? easeOut(settleK) : 1).toFixed(2), G.cx, G.cy + box * 0.18);
+      ctx.fillStyle = C.ink3; ctx.font = `400 11px ${MONO}`;
       ctx.fillText(`RULES ${cur.rules.toUpperCase()}`, G.cx, G.cy + box * 0.5 + 12);
     };
 
@@ -227,7 +227,7 @@
       const yOf = (v) => T + (1 - (v - yr.lo) / (yr.hi - yr.lo)) * (h - T - B);
 
       // grid
-      ctx.font = `400 10px ${MONO}`; ctx.textBaseline = "middle"; ctx.textAlign = "right";
+      ctx.font = `400 11px ${MONO}`; ctx.textBaseline = "middle"; ctx.textAlign = "right";
       const stepV = niceStep((yr.hi - yr.lo) / 4);
       ctx.lineWidth = 1;
       for (let v = Math.ceil(yr.lo / stepV) * stepV; v <= yr.hi; v += stepV) {
@@ -306,6 +306,18 @@
     let rTimer = 0;
     const startReducedAuto = () => { stopReducedAuto(); rTimer = setInterval(() => { if (visible) runRound(false); }, 1400); };
     const stopReducedAuto = () => { clearInterval(rTimer); rTimer = 0; };
+
+    // ---- "Try it" chip: touch-aware wording; leaves on the first real interaction ----
+    const tryChip = fig.querySelector("#ag-try");
+    if (tryChip && matchMedia("(hover: none)").matches) tryChip.querySelector(".ag-try-t").textContent = "Tap Run round, or drag the gap";
+    const tried = () => {
+      if (!tryChip || tryChip.classList.contains("is-gone")) return;
+      tryChip.classList.add("is-gone");
+      setTimeout(() => tryChip.remove(), 500);
+    };
+    [runBtn, autoBtn, resetBtn].forEach((b) => b.addEventListener("click", tried));
+    gapIn.addEventListener("input", tried);
+    rulesIn.forEach((r) => r.addEventListener("change", tried));
 
     // ---- Controls ----
     runBtn.addEventListener("click", () => { if (auto) setAuto(false); runRound(true); });

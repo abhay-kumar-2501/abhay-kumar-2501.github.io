@@ -77,6 +77,22 @@
     main.after(a);
   }
 
+  if (page === "case" && main) {
+    const i = CASES.findIndex(c => location.pathname.endsWith("/" + c.href));
+    if (i > -1) {
+      // The "Next chapter" block already points forward, so the pager only looks back.
+      const prev = i > 0 ? CASES[i - 1] : null;
+      const pager = document.createElement("nav");
+      pager.className = "case-pager wrap";
+      pager.setAttribute("aria-label", "Case studies");
+      pager.innerHTML = (prev
+        ? `<a class="pv" href="${root}${prev.href}"><span class="label">← Previous case · ${prev.n}</span><span class="t">${prev.title}</span></a>`
+        : `<span></span>`) +
+        `<a class="all link-u" href="${root}work/index.html">All work →</a>`;
+      main.after(pager);
+    }
+  }
+
   const footer = document.createElement("footer");
   footer.className = "site-footer";
   footer.innerHTML = `
@@ -119,8 +135,8 @@
 
   const describe = (url) => {
     const path = url.pathname.replace(/\/$/, "/index.html");
-    const all = [...PAGES, ...CASES];
-    const hit = all.find(p => path.endsWith("/" + p.href)) || (path.endsWith("/index.html") && !path.includes("/work/") ? PAGES[0] : null);
+    const all = [...PAGES, ...CASES].sort((a, b) => b.href.length - a.href.length); // most specific first
+    const hit = all.find(p => path.endsWith("/" + p.href)) || (path === "/" ? PAGES[0] : null);
     return hit ? { n: hit.n, t: hit.title } : { n: "", t: "" };
   };
 
@@ -139,7 +155,7 @@
     body.classList.remove("menu-open");
     curtain.classList.remove("out");
     curtain.classList.add("in");
-    setTimeout(() => { location.href = url.href; }, 680);
+    setTimeout(() => { location.href = url.href; }, 420);
   });
   addEventListener("pageshow", (e) => { if (e.persisted) { curtain.classList.remove("in", "out"); doc.classList.remove("is-entering"); } });
 
@@ -208,8 +224,6 @@
     const max = doc.scrollHeight - vh;
     progress.style.setProperty("--read", max > 0 ? (y / max).toFixed(4) : 0);
     header.classList.toggle("is-solid", y > 8);
-    if (!body.classList.contains("menu-open")) header.classList.toggle("is-hidden", y > 240 && y > lastY + 2);
-    if (y < lastY - 2) header.classList.remove("is-hidden");
     lastY = y;
     scenes.forEach((s) => {
       const r = s.el.getBoundingClientRect();

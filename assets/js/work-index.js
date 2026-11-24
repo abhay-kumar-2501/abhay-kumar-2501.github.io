@@ -62,13 +62,13 @@
     const { ctx, w, h } = f;
     const S = SERIES[kind];
     ctx.clearRect(0, 0, w, h);
-    const pad = { l: 10, r: 10, t: 22, b: 12 };
+    const pad = { l: 10, r: 10, t: 24, b: 12 };
     const all = S.lines.flatMap((l) => l.d);
     const lo = Math.min(...all), hi = Math.max(...all);
     const X = (i) => pad.l + (i / (S.N - 1)) * (w - pad.l - pad.r);
     const Y = (v) => pad.t + (1 - (v - lo) / (hi - lo || 1)) * (h - pad.t - pad.b);
     const mono = AK.css("--mono") || "monospace";
-    ctx.font = `9px ${mono}`;
+    ctx.font = `11px ${mono}`;
     ctx.textBaseline = "top";
 
     // faint grid
@@ -127,6 +127,10 @@
   const preview = document.getElementById("wi-preview");
   const pCanvas = preview && preview.querySelector("canvas");
   const fine = matchMedia("(hover: hover) and (pointer: fine)");
+  const cue = document.getElementById("wi-cue");
+  const dropCue = () => { if (cue && !cue.classList.contains("is-gone")) { cue.classList.add("is-gone"); setTimeout(() => cue.remove(), 600); } };
+  // Narrow window with a mouse: the summary toggle shouldn't say "Tap".
+  if (matchMedia("(hover: hover)").matches) document.querySelectorAll(".wi-toggle").forEach((b) => { if (b.firstChild && b.firstChild.nodeType === 3) b.firstChild.nodeValue = "Show summary "; });
   let current = null, tx = 0, ty = 0, x = 0, y = 0, running = false;
 
   const place = () => {
@@ -158,6 +162,7 @@
           preview.querySelector('[data-p="num"]').textContent = row.querySelector(".num").textContent;
           preview.querySelector('[data-p="cap"]').textContent = item.dataset.cap;
           preview.classList.add("is-on");
+          dropCue();
           requestAnimationFrame(() => animate(pCanvas, item.dataset.preview));
         }
         if (!running) { running = true; requestAnimationFrame(follow); }
